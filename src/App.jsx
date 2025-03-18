@@ -64,21 +64,21 @@ function App() {
   const [itens, setItens] = useState(8);
 
   useEffect(() => {
-      fetch(`http://localhost:8080/chamados/user/userListChamados?paginas=${paginas}&itens=${itens}`)
+      fetch(`${process.env.APP_URL}chamados/user/userListChamados?paginas=${paginas}&itens=${itens}`)
         .then((res) => res.json())
         .then((dados) => setChamadosUser(dados))
         .catch((error) => console.error("Erro ao buscar dados:", error));
     }, [paginas, itens]);
 
     useEffect(() => {
-      fetch(`http://localhost:8080/chamados/implantacao/usuarioImplantacao?paginas=${paginas}&itens=${itens}`)
+      fetch(`${process.env.APP_URL}chamados/implantacao/usuarioImplantacao?paginas=${paginas}&itens=${itens}`)
         .then((res) => res.json())
         .then((dados) => setChamadosImplantacao(dados))
         .catch((error) => console.error("Erro ao buscar dados:", error));
     }, [paginas, itens]);
 
     useEffect(() => {
-      fetch(`http://localhost:8080/chamados/customizacao/usuarioCustomizacao?paginas=${paginas}&itens=${itens}`)
+      fetch(`${process.env.APP_URL}chamados/customizacao/usuarioCustomizacao?paginas=${paginas}&itens=${itens}`)
         .then((res) => res.json())
         .then((dados) => setChamadosCustomizacao(dados))
         .catch((error) => console.error("Erro ao buscar dados:", error));

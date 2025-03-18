@@ -36,7 +36,7 @@ export default function ListagemImplantacao({ vetor = [] }){
 
   const atualizarChamado = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/chamados/user/atualizar/${chamadoSelecionado.id}`, {
+        const response = await fetch(`${process.env.APP_URL}chamados/user/atualizar/${chamadoSelecionado.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export default function ListagemImplantacao({ vetor = [] }){
   const excluirChamado = async (id) => {
     if (window.confirm("Você tem certeza que deseja excluir este chamado?")) {
       try {
-        const response = await fetch(`http://localhost:8080/chamados/excluir/${id}`, {
+        const response = await fetch(`${process.env.APP_URL}chamados/excluir/${id}`, {
           method: 'DELETE',
         });
 
@@ -88,7 +88,7 @@ export default function ListagemImplantacao({ vetor = [] }){
  const buscarChamadosPaginados = async () => {
    try {
      const response = await fetch(
-       `http://localhost:8080/chamados/implantacao/usuarioImplantacao?paginas=${paginaAtual}&itens=${itensPorPagina}`
+       `${process.env.APP_URL}chamados/implantacao/usuarioImplantacao?paginas=${paginaAtual}&itens=${itensPorPagina}`
      );
      if (response.ok) {
        const data = await response.json();
@@ -114,21 +114,21 @@ const fetchOptions = async () => {
 
   try {
     // Buscar Assuntos
-    const assuntosResponse = await fetch('http://localhost:8080/chamados/user/userListAssuntos');
+    const assuntosResponse = await fetch('https://chamados-soft.vercel.app/chamados/user/userListAssuntos');
     if (assuntosResponse.ok) {
       const assuntosData = await assuntosResponse.json();
       setAssuntos(assuntosData); // Deve ser um array
     }
 
     // Buscar Status
-    const statusResponse = await fetch('http://localhost:8080/chamados/user/userStatusChamados');
+    const statusResponse = await fetch('https://chamados-soft.vercel.app/chamados/user/userStatusChamados');
     if (statusResponse.ok) {
       const statusData = await statusResponse.json();
       setStatusList(statusData); // Deve ser um array
     }
 
     // Buscar Colaboradores
-    const colaboradoresResponse = await fetch('http://localhost:8080/chamados/user/userListColaboradores');
+    const colaboradoresResponse = await fetch('https://chamados-soft.vercel.app/chamados/user/userListColaboradores');
     if (colaboradoresResponse.ok) {
       const colaboradoresData = await colaboradoresResponse.json();
       setColaboradores(colaboradoresData); // Deve ser um array
@@ -153,7 +153,7 @@ const fetchOptions = async () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:8080/chamados/implantacao/buscarImplantacao?ticket=${ticket}`);
+        const response = await fetch(`${process.env.APP_URL}chamados/implantacao/buscarImplantacao?ticket=${ticket}`);
         if (response.status === 204) {
           setResultados([]);
           setMensagemErro('Nenhum chamado encontrado para este ticket.');
@@ -248,7 +248,7 @@ const fetchOptions = async () => {
                         <td>{objeto.horario}</td>
                         <td>{objeto.dias}</td>
                         <td>
-                          <a href={`http://localhost:8080/chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
+                          <a href={`${process.env.APP_URL}chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
                             {objeto.name}
                           </a>
                         </td>

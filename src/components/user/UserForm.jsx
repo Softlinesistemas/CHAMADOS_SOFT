@@ -20,7 +20,7 @@ function UserForm() {
 
     // Carrega os dados do usuário logado
     axios
-      .get("http://localhost:8080/chamados/user/me", {
+      .get(`${process.env.APP_URL}chamados/user/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -37,17 +37,17 @@ function UserForm() {
 
     // Carregar listas (statusChamados, assuntos, colaboradores)
     axios
-      .get("http://localhost:8080/chamados/user/userStatusChamados")
+      .get(`${process.env.APP_URL}chamados/user/userStatusChamados`)
       .then((response) => setStatusChamados(response.data))
       .catch((error) => console.error("Erro ao carregar status chamados:", error));
 
     axios
-      .get("http://localhost:8080/chamados/user/userListAssuntos")
+      .get(`${process.env.APP_URL}chamados/user/userListAssuntos`)
       .then((response) => setAssuntos(response.data))
       .catch((error) => console.error("Erro ao carregar assuntos:", error));
 
     axios
-      .get("http://localhost:8080/chamados/user/userListColaboradores")
+      .get(`${process.env.APP_URL}chamados/user/userListColaboradores`)
       .then((response) => setColaboradores(response.data))
       .catch((error) => console.error("Erro ao carregar colaboradores:", error));
   }, []);
@@ -89,7 +89,7 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    await axios.post("http://localhost:8080/chamados/user/cadastrar", data, {
+    await axios.post(`${process.env.APP_URL}chamados/user/cadastrar`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,

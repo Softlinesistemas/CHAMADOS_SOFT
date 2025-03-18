@@ -18,7 +18,7 @@ import AdminHeaders from "../headers/AdminHeaders";
 
 React.useEffect(() => {
   axios
-    .get("http://localhost:8080/chamados/relatorio/statusAssuntosChamados") // URL correta da API
+    .get(`${process.env.APP_URL}chamados/relatorio/statusAssuntosChamados`) // URL correta da API
     .then((response) => {
       const data = response.data; // Obtenha os dados diretamente
       setChartData({

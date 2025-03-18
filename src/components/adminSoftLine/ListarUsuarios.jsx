@@ -34,7 +34,7 @@ export default function ListarUsuarios() {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/usuario/admin/listarUsuarios");
+        const response = await axios.get(`${process.env.APP_URL}usuario/admin/listarUsuarios`);
         setUsuarios(response.data);
         setLoading(false);
       } catch (err) {
@@ -49,7 +49,7 @@ export default function ListarUsuarios() {
   // Fetch para listar os papéis disponíveis
   const fetchPapeis = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/usuario/admin/listarPapeis");
+      const response = await axios.get(`${process.env.APP_URL}usuario/admin/listarPapeis`);
       setPapeisDisponiveis(response.data);
     } catch (err) {
       alert("Erro ao carregar os papéis. Tente novamente.");
@@ -107,7 +107,7 @@ export default function ListarUsuarios() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/usuario/atualizar/${usuarioEditando.id}`,
+        `${process.env.APP_URL}usuario/atualizar/${usuarioEditando.id}`,
         formData
       );
 
@@ -147,12 +147,12 @@ const handlePapelChange = (papelId) => {
      papeisSelecionados.forEach((id) => params.append("pps", id));
 
 
-console.log("URL:", `http://localhost:8080/usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`);
+console.log("URL:", `${process.env.APP_URL}usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`);
     console.log("Papeis selecionados:", papeisSelecionados);
 
 
      await axios.put(
-       `http://localhost:8080/usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`
+       `${process.env.APP_URL}usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`
      );
 
      alert("Papéis atualizados com sucesso!");
@@ -170,7 +170,7 @@ const buscarPorCnpj = async () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/usuario/admin/buscarUsuarios?cnpj=${cnpj}`);
+      const response = await fetch(`${process.env.APP_URL}usuario/admin/buscarUsuarios?cnpj=${cnpj}`);
         console.log("Resposta da API:", response);
       if (response.status === 204) {
         setResultados([]);

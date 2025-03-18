@@ -32,7 +32,7 @@ export default function ChamadoUser() {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:8080/usuario/salvar", formData);
+      const response = await axios.post(`${process.env.APP_URL}usuario/salvar`, formData);
 
       setMessage("Usuário cadastrado com sucesso!");
       setAlertType("success");
