@@ -15,7 +15,7 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://chamados-soft.vercel.app/usuario/login', {
+      const response = await fetch(`${process.env.APP_URL}usuario/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: login, password }),

@@ -28,7 +28,7 @@ export default function AdminSoftLineListagem({ vetor = [] }) {
 
 const fetchCnpj = async () => {
   try {
-    const response = await fetch('https://chamados-soft.vercel.app/usuario/listarCnpj', {
+    const response = await fetch(`${process.env.APP_URL}usuario/listarCnpj`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -73,19 +73,19 @@ const fetchCnpj = async () => {
 
   const fetchOptions = async () => {
     try {
-      const assuntosResponse = await fetch('https://chamados-soft.vercel.app/chamados/user/userListAssuntos');
+      const assuntosResponse = await fetch(`${process.env.APP_URL}chamados/user/userListAssuntos`);
       if (assuntosResponse.ok) {
         const assuntosData = await assuntosResponse.json();
         setAssuntos(assuntosData);
       }
 
-      const statusResponse = await fetch('https://chamados-soft.vercel.app/chamados/user/userStatusChamados');
+      const statusResponse = await fetch(`${process.env.APP_URL}chamados/user/userStatusChamados`);
       if (statusResponse.ok) {
         const statusData = await statusResponse.json();
         setStatusList(statusData);
       }
 
-      const colaboradoresResponse = await fetch('https://chamados-soft.vercel.app/chamados/user/userListColaboradores');
+      const colaboradoresResponse = await fetch(`${process.env.APP_URL}chamados/user/userListColaboradores`);
       if (colaboradoresResponse.ok) {
         const colaboradoresData = await colaboradoresResponse.json();
         setColaboradores(colaboradoresData);
