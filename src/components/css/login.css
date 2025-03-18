@@ -1,0 +1,42 @@
+
+
+.navbar{
+
+      justify-content: center;
+      background: white;
+
+}
+
+.navbar-logo {
+
+    width: 250px; /* Ajuste o tamanho conforme necessário */
+    height: auto; /* Mantém a proporção da imagem */
+    border-radius: 1px;
+
+}
+
+.login-form{
+
+    border: 5px solid;
+    text-align: center;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adiciona um espaço de 20px entre os elementos */
+
+}
+
+.form-group {
+  margin-bottom: 20px; /* Adiciona 20px de espaço entre cada campo */
+}
+
+button {
+  margin-top: 10px; /* Adiciona espaço entre o botão e o campo acima */
+}
+
+.titulo{
+
+     text-align: center;
+      margin-top: 20px; /* Ajuste o valor conforme necessário */
+    }
+
