@@ -140,32 +140,32 @@ function App() {
 
 
 
-               <Route path="/" element={<Login />} />
+              <Route path="/" element={<Login />} />
 
-            <Route path="/not-found" element={<NotFound />} />
+              <Route path="/not-found" element={<NotFound />} />
 
 
-           <Route path="/nao-autorizado" element={<NaoAutorizado />} />
+              <Route path="/nao-autorizado" element={<NaoAutorizado />} />
 
-           <Route path="/AvaliacaoCliente" element={<AvaliacaoCliente />} />
+              <Route path="/AvaliacaoCliente" element={<AvaliacaoCliente />} />
 
 
                {/* Rota para o componente UserHeaders */}
 
-               <Route path="/components/user/UsuarioListagem" element={<UsuarioListagem />} />
-               <Route path="/UserForm" element={<UserForm />} />
+              <Route path="/components/user/UsuarioListagem" element={<UsuarioListagem />} />
+              <Route path="/UserForm" element={<UserForm />} />
 
-                <Route path="/components/adminSoftLine/AdminSoftLineListagem" element={<AdminSoftLineListagem />} />
+              <Route path="/components/adminSoftLine/AdminSoftLineListagem" element={<AdminSoftLineListagem />} />
 
-                <Route path="/ListarUsuarios" element={<ListarUsuarios />} />
+              <Route path="/ListarUsuarios" element={<ListarUsuarios />} />
 
-                <Route path="/UsuarioListagem" element={<UsuarioListagem />} />
+              <Route path="/UsuarioListagem" element={<UsuarioListagem />} />
 
-                <Route path="/AdminSoftlineForm" element={<AdminSoftlineForm />} />
+              <Route path="/AdminSoftlineForm" element={<AdminSoftlineForm />} />
 
 
-               <Route path="/UserSoftLineForm" element={<UserSoftLineForm />} />
-               <Route path="/components/customizacao/ListagemCustomizacao" element={<ListagemCustomizacao vetor={chamadosUser} />}/>
+              <Route path="/UserSoftLineForm" element={<UserSoftLineForm />} />
+              <Route path="/components/customizacao/ListagemCustomizacao" element={<ListagemCustomizacao vetor={chamadosUser} />}/>
 
               <Route path="/components/implantacao/ListagemImplantacao" element={<ListagemImplantacao vetor={chamadosUser} />}/>
 
@@ -174,8 +174,8 @@ function App() {
               <Route path="/RelatorioStatusChamados" element={<RelatorioStatusChamados />} />
               <Route path="/ChamadosSetorAberto" element={<ChamadosSetorAberto />} />
               <Route path="/components/userSoftline/UserSoftlineListagem" element={<UserSoftlineListagem />} />
-             <Route path="/NovosClientes" element={<NovosClientes />} />
-             <Route path="/ListaNovosClientes" element={<ListaNovosClientes />} />
+              <Route path="/NovosClientes" element={<NovosClientes />} />
+              <Route path="/ListaNovosClientes" element={<ListaNovosClientes />} />
 
             </Routes>
 
