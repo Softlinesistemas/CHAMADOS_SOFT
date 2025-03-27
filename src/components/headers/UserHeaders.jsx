@@ -23,7 +23,7 @@ export default function UserHeaders() {
           <a href="/UserForm" className="nav-link">Abrir chamado</a>
         </li>
         <li className="nav-item">
-          <a href="/UsuarioListagem" className="nav-link">Listar Chamados</a>
+          <a href="/components/user/UsuarioListagem" className="nav-link">Listar Chamados</a>
         </li>
 
 

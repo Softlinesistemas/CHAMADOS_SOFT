@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import  ImplantacaoHeaders from '../headers/ImplantacaoHeaders';
-
-
-
+import { useNavigate } from 'react-router-dom';
 
 
 export default function ListagemImplantacao({ vetor = [] }){
 
+
+const navigate = useNavigate();
    const [ticket, setTicket] = useState(''); // Estado para o ticket digitado
    const [resultados, setResultados] = useState([]); // Estado para armazenar resultados filtrados
    const [mensagemErro, setMensagemErro] = useState(''); // Estado para mensagens de erro
@@ -23,6 +23,22 @@ export default function ListagemImplantacao({ vetor = [] }){
     const [chamadoSelecionado, setChamadoSelecionado] = useState(null); // Estado para armazenar o chamado selecionado
 
 
+ // Função para verificar se o usuário está autorizado
+  const verificarAutorizacao = () => {
+    // Exemplo de verificação: verifica se há um token no localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Se não houver token, redireciona para a página de não autorizado
+      window.location.href = "/nao-autorizado";
+    }
+  };
+
+  // Verifica a autorização ao carregar o componente
+  useEffect(() => {
+    verificarAutorizacao();
+  }, []);
+
+
     // Função para Abrir o Modal
    const abrirModal = (chamado) => {
       setChamadoSelecionado({ ...chamado });
@@ -36,7 +52,7 @@ export default function ListagemImplantacao({ vetor = [] }){
 
   const atualizarChamado = async () => {
       try {
-        const response = await fetch(`${process.env.APP_URL}chamados/user/atualizar/${chamadoSelecionado.id}`, {
+        const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/atualizar/${chamadoSelecionado.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -63,7 +79,7 @@ export default function ListagemImplantacao({ vetor = [] }){
   const excluirChamado = async (id) => {
     if (window.confirm("Você tem certeza que deseja excluir este chamado?")) {
       try {
-        const response = await fetch(`${process.env.APP_URL}chamados/excluir/${id}`, {
+        const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/excluir/${id}`, {
           method: 'DELETE',
         });
 
@@ -88,7 +104,7 @@ export default function ListagemImplantacao({ vetor = [] }){
  const buscarChamadosPaginados = async () => {
    try {
      const response = await fetch(
-       `${process.env.APP_URL}chamados/implantacao/usuarioImplantacao?paginas=${paginaAtual}&itens=${itensPorPagina}`
+       `https://chamados-softline-k3bsb.ondigitalocean.app/chamados/implantacao/usuarioImplantacao?paginas=${paginaAtual}&itens=${itensPorPagina}`
      );
      if (response.ok) {
        const data = await response.json();
@@ -114,21 +130,21 @@ const fetchOptions = async () => {
 
   try {
     // Buscar Assuntos
-    const assuntosResponse = await fetch(`${process.env.APP_URL}chamados/user/userListAssuntos`);
+    const assuntosResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos");
     if (assuntosResponse.ok) {
       const assuntosData = await assuntosResponse.json();
       setAssuntos(assuntosData); // Deve ser um array
     }
 
     // Buscar Status
-    const statusResponse = await fetch(`${process.env.APP_URL}chamados/user/userStatusChamados`);
+    const statusResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados");
     if (statusResponse.ok) {
       const statusData = await statusResponse.json();
       setStatusList(statusData); // Deve ser um array
     }
 
     // Buscar Colaboradores
-    const colaboradoresResponse = await fetch(`${process.env.APP_URL}chamados/user/userListColaboradores`);
+    const colaboradoresResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores");
     if (colaboradoresResponse.ok) {
       const colaboradoresData = await colaboradoresResponse.json();
       setColaboradores(colaboradoresData); // Deve ser um array
@@ -153,7 +169,7 @@ const fetchOptions = async () => {
       }
 
       try {
-        const response = await fetch(`${process.env.APP_URL}chamados/implantacao/buscarImplantacao?ticket=${ticket}`);
+        const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/implantacao/buscarImplantacao?ticket=${ticket}`);
         if (response.status === 204) {
           setResultados([]);
           setMensagemErro('Nenhum chamado encontrado para este ticket.');
@@ -248,7 +264,7 @@ const fetchOptions = async () => {
                         <td>{objeto.horario}</td>
                         <td>{objeto.dias}</td>
                         <td>
-                          <a href={`${process.env.APP_URL}chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
+                          <a href={`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
                             {objeto.name}
                           </a>
                         </td>

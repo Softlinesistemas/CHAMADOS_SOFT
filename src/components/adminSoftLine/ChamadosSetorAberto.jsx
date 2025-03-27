@@ -4,8 +4,12 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
 import AdminHeaders from "../headers/AdminHeaders";
+import { useNavigate } from "react-router-dom"; // Importe o useNavigate
+
 
  const  ChamadosSetorAberto = () =>{
+
+const navigate = useNavigate(); // Hook para redirecionamento
 
   const [chartData, setChartData] = useState({
     suporte: 0,
@@ -16,9 +20,10 @@ import AdminHeaders from "../headers/AdminHeaders";
     customizacao: 0
   });
 
+{/*}
 React.useEffect(() => {
   axios
-    .get(`${process.env.APP_URL}chamados/relatorio/statusAssuntosChamados`) // URL correta da API
+    .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/relatorio/statusAssuntosChamados") // URL correta da API
     .then((response) => {
       const data = response.data; // Obtenha os dados diretamente
       setChartData({
@@ -33,6 +38,50 @@ React.useEffect(() => {
     })
     .catch((error) => console.error("Erro ao carregar os dados:", error));
 }, []);
+*/}
+
+
+
+  // Verifica se o usuário está autenticado ao carregar o componente
+    useEffect(() => {
+        const token = localStorage.getItem("token"); // Recupera o token do localStorage
+        if (!token) {
+            navigate("/nao-autorizado"); // Redireciona para a página de não autorizado
+        } else {
+            // Faz a requisição para carregar os dados do relatório
+            axios
+                .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/relatorio/statusAssuntosChamados", {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+                    },
+                })
+                .then((response) => {
+                    const data = response.data; // Obtenha os dados diretamente
+                    setChartData({
+                        suporte: data.suporte || 0,
+                        cobranca: data.cobranca || 0,
+                        comercial: data.comercial || 0,
+                        implantacao: data.implantacao || 0,
+                        fiscal: data.fiscal || 0,
+                        customizacao: data.customizacao || 0,
+                    });
+                })
+                .catch((error) => {
+                    if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+                        navigate("/nao-autorizado"); // Redireciona para a página de não autorizado
+                    } else {
+                        console.error("Erro ao carregar os dados:", error);
+                    }
+                });
+        }
+    }, [navigate]);
+
+
+
+
+
+
+
 
   const options = {
     chart: {

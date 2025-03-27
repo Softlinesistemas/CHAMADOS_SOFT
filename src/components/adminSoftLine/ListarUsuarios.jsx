@@ -5,6 +5,7 @@ import AdminHeaders from '../headers/AdminHeaders'; // Certifique-se de que o ca
 
 export default function ListarUsuarios() {
 
+
   const [usuarios, setUsuarios] = useState([]);
   const [cnpj, setCnpj] = useState('');
   const [resultados, setResultados] = useState([]);
@@ -31,10 +32,12 @@ export default function ListarUsuarios() {
     cnpj: "",
   });
 
+
+{/*
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get(`${process.env.APP_URL}usuario/admin/listarUsuarios`);
+        const response = await axios.get("https://chamados-softline-k3bsb.ondigitalocean.app/usuario/admin/listarUsuarios");
         setUsuarios(response.data);
         setLoading(false);
       } catch (err) {
@@ -46,10 +49,46 @@ export default function ListarUsuarios() {
     fetchUsuarios();
   }, []);
 
+
+  */}
+
+  useEffect(() => {
+      const token = localStorage.getItem("token"); // Recupera o token do localStorage
+      if (!token) {
+          // Redireciona para a página de não autorizado
+          window.location.href = "/nao-autorizado";
+          return;
+      }
+
+      const fetchUsuarios = async () => {
+          try {
+              const response = await axios.get("https://chamados-softline-k3bsb.ondigitalocean.app/usuario/admin/listarUsuarios", {
+                  headers: {
+                      Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+                  },
+              });
+              setUsuarios(response.data);
+              setLoading(false);
+          } catch (err) {
+              if (err.response && err.response.status === 403) {
+                  // Redireciona para a página de não autorizado
+                  window.location.href = "/nao-autorizado";
+              } else {
+                  setError("Erro ao buscar usuários. Tente novamente mais tarde.");
+              }
+              setLoading(false);
+          }
+      };
+
+      fetchUsuarios();
+  }, []);
+
+
+
   // Fetch para listar os papéis disponíveis
   const fetchPapeis = async () => {
     try {
-      const response = await axios.get(`${process.env.APP_URL}usuario/admin/listarPapeis`);
+      const response = await axios.get("https://chamados-softline-k3bsb.ondigitalocean.app/usuario/admin/listarPapeis");
       setPapeisDisponiveis(response.data);
     } catch (err) {
       alert("Erro ao carregar os papéis. Tente novamente.");
@@ -107,7 +146,7 @@ export default function ListarUsuarios() {
 
     try {
       const response = await axios.put(
-        `${process.env.APP_URL}usuario/atualizar/${usuarioEditando.id}`,
+        `https://chamados-softline-k3bsb.ondigitalocean.app/usuario/atualizar/${usuarioEditando.id}`,
         formData
       );
 
@@ -147,12 +186,12 @@ const handlePapelChange = (papelId) => {
      papeisSelecionados.forEach((id) => params.append("pps", id));
 
 
-console.log("URL:", `${process.env.APP_URL}usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`);
+console.log("URL:", `https://chamados-softline-k3bsb.ondigitalocean.app/usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`);
     console.log("Papeis selecionados:", papeisSelecionados);
 
 
      await axios.put(
-       `${process.env.APP_URL}usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`
+       `https://chamados-softline-k3bsb.ondigitalocean.app/usuario/editarPapel/${usuarioEditando.id}?${params.toString()}`
      );
 
      alert("Papéis atualizados com sucesso!");
@@ -170,7 +209,7 @@ const buscarPorCnpj = async () => {
     }
 
     try {
-      const response = await fetch(`${process.env.APP_URL}usuario/admin/buscarUsuarios?cnpj=${cnpj}`);
+      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/usuario/admin/buscarUsuarios?cnpj=${cnpj}`);
         console.log("Resposta da API:", response);
       if (response.status === 204) {
         setResultados([]);

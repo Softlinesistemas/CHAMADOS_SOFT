@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminHeaders from "../headers/AdminHeaders";
+import { useNavigate } from "react-router-dom"; // Importe o useNavigate
+
 
 export default function ChamadoUser() {
 
-  const [formData, setFormData] = useState({
+    const navigate = useNavigate(); // Hook para redirecionamento
+
+    const [formData, setFormData] = useState({
     nome: "",
     email: "",
     login: "",
@@ -18,6 +23,18 @@ export default function ChamadoUser() {
 
   const [message, setMessage] = useState("");
   const [alertType, setAlertType] = useState("");
+
+
+
+ // Verifica se o usuário está autenticado ao carregar o componente
+    useEffect(() => {
+        const token = localStorage.getItem("token"); // Recupera o token do localStorage
+        if (!token) {
+            navigate("/nao-autorizado"); // Redireciona para a página de não autorizado
+        }
+    }, [navigate]);
+
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -32,7 +49,7 @@ export default function ChamadoUser() {
     setMessage("");
 
     try {
-      const response = await axios.post(`${process.env.APP_URL}usuario/salvar`, formData);
+      const response = await axios.post("https://chamados-softline-k3bsb.ondigitalocean.app/usuario/salvar", formData);
 
       setMessage("Usuário cadastrado com sucesso!");
       setAlertType("success");

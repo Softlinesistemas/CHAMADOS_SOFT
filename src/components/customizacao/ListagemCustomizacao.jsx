@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import CustomizacaoHeaders from '../headers/CustomizacaoHeaders';
+import { useNavigate } from 'react-router-dom';
 
 export default function ListagemCustomizacao({ vetor = [] }) {
 
+
+const navigate = useNavigate();
    const [ticket, setTicket] = useState(''); // Estado para o ticket digitado
    const [resultados, setResultados] = useState([]); // Estado para armazenar resultados filtrados
    const [mensagemErro, setMensagemErro] = useState(''); // Estado para mensagens de erro
@@ -19,6 +22,21 @@ export default function ListagemCustomizacao({ vetor = [] }) {
     const [chamadoSelecionado, setChamadoSelecionado] = useState(null); // Estado para armazenar o chamado selecionado
 
 
+  // Função para verificar se o usuário está autorizado
+  const verificarAutorizacao = () => {
+    // Exemplo de verificação: verifica se há um token no localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Se não houver token, redireciona para a página de não autorizado
+      window.location.href = "/nao-autorizado";
+    }
+  };
+
+  // Verifica a autorização ao carregar o componente
+  useEffect(() => {
+    verificarAutorizacao();
+  }, []);
+
     // Função para Abrir o Modal
    const abrirModal = (chamado) => {
       setChamadoSelecionado({ ...chamado });
@@ -33,7 +51,7 @@ export default function ListagemCustomizacao({ vetor = [] }) {
 
       const atualizarChamado = async () => {
         try {
-          const response = await fetch(`${process.env.APP_URL}chamados/user/atualizar/${chamadoSelecionado.id}`, {
+          const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/atualizar/${chamadoSelecionado.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -61,7 +79,7 @@ export default function ListagemCustomizacao({ vetor = [] }) {
   const excluirChamado = async (id) => {
     if (window.confirm("Você tem certeza que deseja excluir este chamado?")) {
       try {
-        const response = await fetch(`${process.env.APP_URL}chamados/excluir/${id}`, {
+        const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/excluir/${id}`, {
           method: 'DELETE',
         });
 
@@ -85,7 +103,7 @@ export default function ListagemCustomizacao({ vetor = [] }) {
   const buscarChamadosPaginados = async () => {
     try {
       const response = await fetch(
-        `${process.env.APP_URL}chamados/customizacao/usuarioCustomizacao?paginas=${paginaAtual}&itens=${itensPorPagina}`
+        `https://chamados-softline-k3bsb.ondigitalocean.app/chamados/customizacao/usuarioCustomizacao?paginas=${paginaAtual}&itens=${itensPorPagina}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -110,21 +128,21 @@ const fetchOptions = async () => {
 
   try {
     // Buscar Assuntos
-    const assuntosResponse = await fetch(`${process.env.APP_URL}chamados/user/userListAssuntos`);
+    const assuntosResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos");
     if (assuntosResponse.ok) {
       const assuntosData = await assuntosResponse.json();
       setAssuntos(assuntosData); // Deve ser um array
     }
 
     // Buscar Status
-    const statusResponse = await fetch(`${process.env.APP_URL}chamados/user/userStatusChamados`);
+    const statusResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados");
     if (statusResponse.ok) {
       const statusData = await statusResponse.json();
       setStatusList(statusData); // Deve ser um array
     }
 
     // Buscar Colaboradores
-    const colaboradoresResponse = await fetch(`${process.env.APP_URL}chamados/user/userListColaboradores`);
+    const colaboradoresResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores");
     if (colaboradoresResponse.ok) {
       const colaboradoresData = await colaboradoresResponse.json();
       setColaboradores(colaboradoresData); // Deve ser um array
@@ -149,7 +167,7 @@ const fetchOptions = async () => {
 
     try {
       const response = await fetch(
-        `${process.env.APP_URL}chamados/customizacao/buscarCustomizacao?ticket=${ticket}`
+        `https://chamados-softline-k3bsb.ondigitalocean.app/chamados/customizacao/buscarCustomizacao?ticket=${ticket}`
       );
       if (response.status === 204) {
         setResultados([]);
@@ -195,13 +213,26 @@ const fetchOptions = async () => {
                       </button>
                     </div>
 
+                         <div className="d-flex align-items-center ms-0">
+                                 <span className="me-2" style={{ color: 'blue' }}>•</span> {/* Ponto azul */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Bom</span>
+
+                                 <span className="me-2" style={{ color: 'green' }}>•</span> {/* Ponto verde */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Excelente</span>
+
+                                 <span className="me-2" style={{ color: 'orange' }}>•</span> {/* Ponto amarelo */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Regular</span>
+
+                                 <span className="me-2" style={{ color: 'red' }}>•</span> {/* Ponto vermelho */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Ruim</span>
+                         </div>
                     {mensagemErro && <p className="text-danger text-center">{mensagemErro}</p>}
 
 
             <table className="table table-success table-striped">
                   <thead>
                     <tr>
-
+                     <th>Avaliação</th>
                       <th>Empresa</th>
                       <th>CNPJ</th>
                       <th>Nome</th>
@@ -237,7 +268,13 @@ const fetchOptions = async () => {
                             }
 
                       >
+                         <td>
 
+                          {objeto.pesquisa === "Ruim" && <span className="ms-2 text-danger pisca">&#x2B24;</span>}
+                          {objeto.pesquisa === "Bom" && <span className="ms-2 text-primary pisca">&#x2B24;</span>}
+                          {objeto.pesquisa === "Regular" && <span className="ms-2 text-warning pisca">&#x2B24;</span>}
+                          {objeto.pesquisa === "Excelente" && <span className="ms-2 text-success pisca">&#x2B24;</span>}
+                         </td>
                         <td>{objeto.empresa}</td>
                         <td>{objeto.cnpj}</td>
                         <td>{objeto.nome}</td>
@@ -247,7 +284,7 @@ const fetchOptions = async () => {
                         <td>{objeto.horario}</td>
                         <td>{objeto.dias}</td>
                         <td>
-                          <a href={`${process.env.APP_URL}chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
+                          <a href={`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
                             {objeto.name}
                           </a>
                         </td>

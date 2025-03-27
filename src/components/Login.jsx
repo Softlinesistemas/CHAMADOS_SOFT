@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+
 function Login() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -9,13 +10,16 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${process.env.APP_URL}usuario/login`, {
+      const response = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/usuario/login", {
+// https://chamados-softline-k3bsb.ondigitalocean.app
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: login, password }),
@@ -61,10 +65,12 @@ function Login() {
       justifyContent: "center",
       alignItems: "center",
       height: "100vh",
-      backgroundColor: "#f4f4f4"
+      backgroundImage: "url('/img1.jpg')", // Usa a imagem local
+      backgroundSize: "cover", // Garante que a imagem cubra toda a tela
+      backgroundPosition: "center", // Centraliza a imagem
     }}>
       <div style={{
-        background: "#fff",
+        background: "rgba(255, 255, 255, 0.9)", // Fundo branco com transparência
         padding: "2rem",
         borderRadius: "10px",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
@@ -93,6 +99,7 @@ function Login() {
             placeholder="Email"
             value={login}
             onChange={(e) => setLogin(e.target.value)}
+            className="rounded-pill"
             style={{
               padding: "10px",
               marginBottom: "10px",
@@ -105,6 +112,7 @@ function Login() {
             placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="rounded-pill"
             style={{
               padding: "10px",
               marginBottom: "10px",
@@ -115,6 +123,7 @@ function Login() {
           <button
             type="submit"
             disabled={isLoading}
+            className=" rounded-pill"
             style={{
               padding: "10px",
               borderRadius: "5px",

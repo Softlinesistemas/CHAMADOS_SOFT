@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminHeaders from "../headers/AdminHeaders";
+import { useNavigate } from "react-router-dom"; // Importe o useNavigate
+import { jwtDecode } from "jwt-decode"; // Para decodificar o token JWT
+
+import ListaNovosClientes from './ListaNovosClientes';
 
 export default function NovosClientes() {
-  const [formData, setFormData] = useState({
 
-    empresa: "",
+
+    const navigate = useNavigate(); // Hook para redirecionamento
+    const [formData, setFormData] = useState({
+
+    nomeEmpresa: "",
     ramo: "",
     qtdMaquinas: "",
     horasContratadas: "",
     endereco: "",
-    pontoDeReferencia: "",
+    pontoDeReferrencia: "",
     responsavel: "",
     telefone: "",
     observacaoImplantacao: "",
     observacaoTreinamento: "",
     cjpj: "",
     dataInicialDaImplantacao: "",
-    dataInauguracao: "",
+    dataInaguracao: "",
     dataFinalDaImplantacao: "",
     localDoServidor: "",
     configuracaoServidor: "",
     migracaoDeDados: "",
-    homologacaoBoleto: "",
+    homologacaBoleto: "",
     assinaturaContratoDePrestacaoDeServico: "",
     pagamento: "",
     servidorEmNuvemEmCotacao: "",
@@ -31,6 +38,35 @@ export default function NovosClientes() {
      modulos: [], // Inicializar como array
      treinamento: [], // Inicializar como array
   });
+
+
+// Verificação de autorização ao montar o componente
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Recupera o token do localStorage
+
+    if (!token) {
+      // Se não houver token, redireciona para a página de não autorizado
+      window.location.href = "/nao-autorizado";
+      return;
+    }
+
+    // Decodifica o token para verificar as roles
+    try {
+      const decodedToken = jwtDecode(token);
+      const roles = decodedToken.roles || [];
+
+      // Verifica se o usuário tem a role necessária (por exemplo, ADMIN)
+      if (!roles.includes("ADMIN")) {
+        window.location.href = "/nao-autorizado";
+      }
+    } catch (error) {
+      console.error("Erro ao decodificar o token:", error);
+      window.location.href = "/nao-autorizado";
+    }
+  }, []); // Executa apenas uma vez ao montar o componente
+
+
+
 
    const handleChange = (e) => {
      const { name, value, options, multiple } = e.target;
@@ -42,11 +78,67 @@ export default function NovosClientes() {
          .map((option) => option.value);
        setFormData({ ...formData, [name]: selectedValues });
      } else {
+         console.log(`Campo alterado: ${name}, Valor: ${value}`); // Adicione este console.log
        setFormData({ ...formData, [name]: value });
      }
    };
 
 
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Dados do formulário:", formData); // Verifique se os campos estão preenchidos
+
+    try {
+      const response = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/admin/novosClientes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert("Cliente cadastrado com sucesso!");
+        console.log("Cliente cadastrado:", data);
+        // Limpar o formulário após o sucesso
+        setFormData({
+          nomeEmpresa: "",
+          ramo: "",
+          qtdMaquinas: "",
+          horasContratadas: "",
+          endereco: "",
+          pontoDeReferrencia: "",
+          responsavel: "",
+          telefone: "",
+          observacaoImplantacao: "",
+          observacaoTreinamento: "",
+          cjpj: "",
+          dataInicialDaImplantacao: "",
+          dataInaguracao: "",
+          dataFinalDaImplantacao: "",
+          localDoServidor: "",
+          configuracaoservidor: "",
+          migracaoDeDados: "",
+          homologacaBoleto: "",
+          assinaturaContratoDePrestacaoDeServico: "",
+          pagamento: "",
+          servidorEmNuvemEmCotacao: "",
+          configuracoesDoServidor: "",
+          quaisDadosAmigrar: [],
+          responsabilidadeDoCliente: [],
+          modulos: [],
+          treinamento: [],
+        });
+      } else {
+        const errorData = await response.json();
+        alert(`Erro ao cadastrar cliente: ${errorData.message || "Erro desconhecido"}`);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      alert("Erro na comunicação com o servidor.");
+    }
+  };
 
 
   return (
@@ -71,7 +163,7 @@ export default function NovosClientes() {
                  </a>
                </li>
                <li>
-                 <a href="#" className="nav-link text-white">
+                 <a href="/ListaNovosClientes" className="nav-link text-white" >
                    <svg className="bi pe-none me-2" width="16" height="16">
                      <use xlinkHref="#speedometer2"></use>
                    </svg>
@@ -111,7 +203,7 @@ export default function NovosClientes() {
     <div className="container">
          <AdminHeaders />
       <h2 className="alert alert-primary my-4 text-center" role="alert">Formulário do Novo Cliente</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="row g-3 border border-4">
           {/** Text Inputs */}
 
@@ -119,8 +211,8 @@ export default function NovosClientes() {
                       <label>Empresa:</label>
                       <input
                         type="text"
-                        name="empresa"
-                        value={formData.empresa}
+                        name="nomeEmpresa"
+                        value={formData.nomeEmpresa}
                         onChange={handleChange}
                         className="form-control border border-primary"
                       />
@@ -156,7 +248,7 @@ export default function NovosClientes() {
                       <input
                         type="Date"
                         name="dataInaguracao"
-                        value={formData.dataInaguracao}
+                        value={formData.dataInaguracao ?? ""}
                         onChange={handleChange}
                         className="form-control border border-danger-subtle"
                       />
@@ -213,8 +305,8 @@ export default function NovosClientes() {
             <label>Ponto de Referência:</label>
             <input
               type="text"
-              name="pontoDeReferencia"
-              value={formData.pontoDeReferencia}
+              name="pontoDeReferrencia"
+              value={formData.pontoDeReferrencia}
               onChange={handleChange}
               className="form-control border border-info"
             />
@@ -321,8 +413,8 @@ export default function NovosClientes() {
           <div className="col-md-4">
             <label>Homologação Boleto:</label>
             <select
-              name="homologacaoBoleto"
-              value={formData.homologacaoBoleto}
+              name="homologacaBoleto"
+              value={formData.homologacaBoleto}
               onChange={handleChange}
               className="form-select border border-info"
             >
@@ -331,6 +423,22 @@ export default function NovosClientes() {
               <option value="Não">Não</option>
             </select>
           </div>
+
+          <div className="col-md-4">
+                      <label>Assinatura do Contrato de Prestação de Serviço:</label>
+                      <select
+                        name="assinaturaContratoDePrestacaoDeServico"
+                        value={formData.assinaturaContratoDePrestacaoDeServico}
+                        onChange={handleChange}
+                        className="form-select border border-info"
+                      >
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                      </select>
+                    </div>
+
+
 
           <div className="col-md-6">
             <label>Quais Dados a Migrar:</label>
@@ -368,6 +476,9 @@ export default function NovosClientes() {
               <option value="Adicionar um item">Adicionar um item</option>
             </select>
           </div>
+
+
+
 
           <div className="col-md-6">
             <label>Módulos:</label>
@@ -503,6 +614,54 @@ export default function NovosClientes() {
               <option value="Fiscal">Fiscal</option>
               <option value="Módulo Web">Módulo Web</option>
               <option value="Ordem de Serviço">Ordem de Serviço</option>
+            </select>
+          </div>
+
+
+          <div className="col-md-4">
+            <label>Configurações do Servidor:</label>
+            <select
+              name="configuracoesDoServidor"
+              value={formData.configuracoesDoServidor}
+              onChange={handleChange}
+              className="form-select border border-info"
+            >
+              <option value="">Selecione</option>
+              <option value="VPS SSD 01GB 1x vCPU 2.5 Ghz 30 GB">VPS SSD 01GB 1x vCPU 2.5 Ghz 30 GB</option>
+              <option value="VPS SSD 02GB 1x vCPU 2.5 Ghz 50 GB">VPS SSD 02GB 1x vCPU 2.5 Ghz 50 GB</option>
+              <option value="VPS SSD 03GB 2x vCPU 2.5 Ghz 100 GB">VPS SSD 03GB 2x vCPU 2.5 Ghz 100 GB</option>
+              <option value="VPS SSD 04GB 4x vCPU 2.5 Ghz 150 GB">VPS SSD 04GB 4x vCPU 2.5 Ghz 150 GB</option>
+              <option value="VPS SSD 08GB 6x vCPU 2.5 Ghz 200 GB">VPS SSD 08GB 6x vCPU 2.5 Ghz 200 GB</option>
+              <option value="VPS SSD 16GB 8x vCPU 2.5 Ghz 300 GB">VPS SSD 16GB 8x vCPU 2.5 Ghz 300 GB</option>
+            </select>
+          </div>
+
+
+          <div className="col-md-4">
+            <label>Servidor em Nuvem em Cotação:</label>
+            <select
+              name="servidorEmNuvemEmCotacao"
+              value={formData.servidorEmNuvemEmCotacao}
+              onChange={handleChange}
+              className="form-select border border-info"
+            >
+              <option value="">Selecione</option>
+              <option value="COTAÇÃO INICIADA">COTAÇÃO INICIADA</option>
+              <option value="COTAÇÃO CONCLUIDA">COTAÇÃO CONCLUIDA</option>
+            </select>
+          </div>
+
+          <div className="col-md-4">
+            <label>Pagamento Realizado:</label>
+            <select
+              name="pagamento"
+              value={formData.pagamento}
+              onChange={handleChange}
+              className="form-select border border-info"
+            >
+              <option value="">Selecione</option>
+              <option value="SIM">SIM</option>
+              <option value="NÃO">NÃO</option>
             </select>
           </div>
 

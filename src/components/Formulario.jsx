@@ -23,17 +23,17 @@ function Formulario() {
   // Carregar listas (statusChamados, assuntos, colaboradores)
   React.useEffect(() => {
     axios
-      .get(`${process.env.APP_URL}chamados/user/userStatusChamados`)
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados")
       .then((response) => setStatusChamados(response.data))
       .catch((error) => console.error("Erro ao carregar status chamados:", error));
 
     axios
-      .get(`${process.env.APP_URL}chamados/user/userListAssuntos`)
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos")
       .then((response) => setAssuntos(response.data))
       .catch((error) => console.error("Erro ao carregar assuntos:", error));
 
     axios
-      .get(`${process.env.APP_URL}chamados/user/userListColaboradores`)
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores")
       .then((response) => setColaboradores(response.data))
       .catch((error) => console.error("Erro ao carregar colaboradores:", error));
   }, []);
@@ -80,10 +80,11 @@ const handleSubmit = async (e) => {
 
   try {
     const response = await axios.post(
-      `${process.env.APP_URL}chamados/user/cadastrar`, data, {
+      "https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/cadastrar", data, {
 headers: {
         "Content-Type": "multipart/form-data",
       },
+
       }
     );
     alert("Chamado registrado com sucesso!");

@@ -5,6 +5,11 @@ import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
 
 const ChamadosEmAberto = () => {
+
+    // URL base da API (substitua pelo link do Ngrok)
+      const backend = "https://677c-186-240-130-17.ngrok-free.app";
+
+
   const [chartData, setChartData] = useState({
     suporte: 0,
     fiscal: 0,
@@ -16,7 +21,7 @@ const ChamadosEmAberto = () => {
 
 React.useEffect(() => {
   axios
-    .get(`${process.env.APP_URL}chamados/relatorio/statusAssuntosChamados`) // URL correta da API
+    .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/relatorio/statusAssuntosChamados") // URL correta da API
     .then((response) => {
       const data = response.data; // Obtenha os dados diretamente
       setChartData({

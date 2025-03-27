@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import '../css/UserSoftlineListagem.css';
 
 import UserSoftLineHeaders from "../headers/UserSoftLineHeaders";
+import { useNavigate } from 'react-router-dom';
 
 
 export default function UserSoftlineListagem({ vetor = [] }) {
 
+const navigate = useNavigate();
+
+const [colaborador, setColaborador] = useState('');
   const [ticket, setTicket] = useState('');
   const [resultados, setResultados] = useState([]);
   const [mensagemErro, setMensagemErro] = useState('');
@@ -20,21 +25,67 @@ export default function UserSoftlineListagem({ vetor = [] }) {
   const [modalAberto, setModalAberto] = useState(false);
   const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
 
+
+ // Função para verificar se o usuário está autorizado
+  const verificarAutorizacao = () => {
+    // Exemplo de verificação: verifica se há um token no localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Se não houver token, redireciona para a página de não autorizado
+      window.location.href = "/nao-autorizado";
+    }
+  };
+
+  // Verifica a autorização ao carregar o componente
+  useEffect(() => {
+    verificarAutorizacao();
+  }, []);
+
+
+
+ const buscarPorColaborador = async () => {
+
+ if (!colaborador.trim()) {
+     setMensagemErro('Por favor, insira um nome válido.');
+     return;
+   }
+
+   try {
+     const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/listarPorColaborador?nome=${colaborador}`);
+
+     if (response.status === 204) {
+       setResultados([]);
+       setMensagemErro('Nenhum colaborador encontrado!!');
+     } else if (response.ok) {
+       const data = await response.json();
+       setResultados(data);
+       setMensagemErro('');
+     } else {
+       const errorText = await response.text(); // Captura o corpo da resposta em caso de erro
+       setMensagemErro(`Erro ao buscar os dados: ${errorText}`);
+     }
+   } catch (error) {
+     setMensagemErro('Erro na comunicação com o servidor.');
+   }
+ };
+
+
+
   const fetchOptions = async () => {
     try {
-      const assuntosResponse = await fetch(`${process.env.APP_URL}chamados/user/userListAssuntos`);
+      const assuntosResponse = await fetch('https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos');
       if (assuntosResponse.ok) {
         const assuntosData = await assuntosResponse.json();
         setAssuntos(assuntosData);
       }
 
-      const statusResponse = await fetch(`${process.env.APP_URL}chamados/user/userStatusChamados`);
+      const statusResponse = await fetch('https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados');
       if (statusResponse.ok) {
         const statusData = await statusResponse.json();
         setStatusList(statusData);
       }
 
-      const colaboradoresResponse = await fetch(`${process.env.APP_URL}chamados/user/userListColaboradores`);
+      const colaboradoresResponse = await fetch('https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores');
       if (colaboradoresResponse.ok) {
         const colaboradoresData = await colaboradoresResponse.json();
         setColaboradores(colaboradoresData);
@@ -60,7 +111,7 @@ export default function UserSoftlineListagem({ vetor = [] }) {
 
   const atualizarChamado = async () => {
     try {
-      const response = await fetch(`${process.env.APP_URL}chamados/user/atualizar/${chamadoSelecionado.id}`, {
+      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/atualizar/${chamadoSelecionado.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +138,7 @@ export default function UserSoftlineListagem({ vetor = [] }) {
   const excluirChamado = async (id) => {
     if (window.confirm("Você tem certeza que deseja excluir este chamado?")) {
       try {
-        const response = await fetch(`${process.env.APP_URL}chamados/excluir/${id}`, {
+        const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/excluir/${id}`, {
           method: 'DELETE',
         });
 
@@ -111,7 +162,7 @@ export default function UserSoftlineListagem({ vetor = [] }) {
   const buscarChamadosPaginados = async () => {
     try {
       const response = await fetch(
-        `${process.env.APP_URL}chamados/user/userListChamados?paginas=${paginaAtual}&itens=${itensPorPagina}`
+        `https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListChamados?paginas=${paginaAtual}&itens=${itensPorPagina}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -137,7 +188,7 @@ export default function UserSoftlineListagem({ vetor = [] }) {
     }
 
     try {
-      const response = await fetch(`${process.env.APP_URL}chamados/user/softline/buscarChamados?ticket=${ticket}`);
+      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/softline/buscarChamados?ticket=${ticket}`);
 
       if (response.status === 204) {
         setResultados([]);
@@ -165,20 +216,54 @@ export default function UserSoftlineListagem({ vetor = [] }) {
 
   <br />
 
-      {/* Div de busca por ticket */}
-      <div className="d-flex justify-content-center mb-4">
-        <input
-          type="text"
-          className="form-control rounded-pill border border-success w-50"
-          placeholder="Digite o número do chamado"
-          value={ticket}
-          onChange={(e) => setTicket(e.target.value)}
-        />
-        <button className="btn btn-success rounded-pill ms-2" onClick={buscarPorTicket}>
-          Buscar
-        </button>
-      </div>
+       <div>
+                  {/* Div de busca por ticket e colaborador */}
+                  <div className="d-flex justify-content-start mb-4">
+                    {/* Div de busca por ticket */}
+                    <div className="d-flex align-items-center me-3">
+                      <input
+                        type="text"
+                        className="form-control rounded-pill border border-success me-2"
+                        style={{ width: "300px" }}
+                        placeholder="Digite o número do chamado"
+                        value={ticket}
+                        onChange={(e) => setTicket(e.target.value)}
+                      />
+                      <button className="btn btn-success rounded-pill" onClick={buscarPorTicket}>
+                        Buscar
+                      </button>
+                    </div>
 
+                    {/* Div de busca por colaborador */}
+                    <div className="d-flex align-items-center">
+                      <input
+                        type="text"
+                        className="form-control rounded-pill border border-success me-2"
+                        style={{ width: "300px" }}
+                        placeholder="Digite o nome do colaborador"
+                        value={colaborador}
+                        onChange={(e) => setColaborador(e.target.value)}
+                      />
+                      <button className="btn btn-success rounded-pill" onClick={buscarPorColaborador}>
+                        Buscar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                         <div className="d-flex align-items-center ms-0">
+                                 <span className="me-2" style={{ color: 'blue' }}>•</span> {/* Ponto azul */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Bom</span>
+
+                                 <span className="me-2" style={{ color: 'green' }}>•</span> {/* Ponto verde */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Excelente</span>
+
+                                 <span className="me-2" style={{ color: 'orange' }}>•</span> {/* Ponto amarelo */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Regular</span>
+
+                                 <span className="me-2" style={{ color: 'red' }}>•</span> {/* Ponto vermelho */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Ruim</span>
+                         </div>
       {mensagemErro && <p className="text-danger text-center">{mensagemErro}</p>}
 
 
@@ -187,6 +272,7 @@ export default function UserSoftlineListagem({ vetor = [] }) {
         <thead>
           <tr>
 
+             <th>Pesquisa</th>
              <th>Ticket</th>
              <th>Horário</th>
             <th>Empresa</th>
@@ -224,7 +310,13 @@ export default function UserSoftlineListagem({ vetor = [] }) {
 
              >
 
+                 <td>
 
+                  {objeto.pesquisa === "Ruim" && <span className="ms-2 text-danger pisca">&#x2B24;</span>}
+                  {objeto.pesquisa === "Bom" && <span className="ms-2 text-primary pisca">&#x2B24;</span>}
+                  {objeto.pesquisa === "Regular" && <span className="ms-2 text-warning pisca">&#x2B24;</span>}
+                  {objeto.pesquisa === "Excelente" && <span className="ms-2 text-success pisca">&#x2B24;</span>}
+                 </td>
 
                <td>{objeto.ticket}</td>
                 <td>{objeto.horario}</td>
@@ -244,7 +336,7 @@ export default function UserSoftlineListagem({ vetor = [] }) {
                <td>{objeto.dias}</td>
 
                <td>
-                    <a href={`${process.env.APP_URL}chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
+                    <a href={`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
                                  {objeto.name}
                      </a>
                 </td>

@@ -44,12 +44,17 @@ import ListarUsuarios from "./components/adminSoftLine/ListarUsuarios";
 import UserSoftLineForm from "./components/userSoftline/UserSoftLineForm";
 
 import NovosClientes from './components/adminSoftLine/NovosClientes';
+import ListaNovosClientes from "./components/adminSoftLine/ListaNovosClientes";
+import AvaliacaoCliente from './components/adminSoftLine/AvaliacaoCliente';
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation  } from "react-router-dom"; // Certifique-se de usar o nome correto
 import UserHeaders from "./components/headers/UserHeaders";
 
 import ChamadosSetorAberto from "./components/adminSoftLine/ChamadosSetorAberto"
 import Login from "./components/Login";
+
+import NaoAutorizado from "./NaoAutorizado";
+
 
 function App() {
 
@@ -63,22 +68,22 @@ function App() {
   const [paginas, setPaginas] = useState(0);
   const [itens, setItens] = useState(8);
 
-  useEffect(() => {
-      fetch(`${process.env.APP_URL}chamados/user/userListChamados?paginas=${paginas}&itens=${itens}`)
+  useEffect(() => {  //https://chamados-softline-k3bsb.ondigitalocean.app/
+      fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListChamados?paginas=${paginas}&itens=${itens}`)
         .then((res) => res.json())
         .then((dados) => setChamadosUser(dados))
         .catch((error) => console.error("Erro ao buscar dados:", error));
     }, [paginas, itens]);
 
     useEffect(() => {
-      fetch(`${process.env.APP_URL}chamados/implantacao/usuarioImplantacao?paginas=${paginas}&itens=${itens}`)
+      fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/implantacao/usuarioImplantacao?paginas=${paginas}&itens=${itens}`)
         .then((res) => res.json())
         .then((dados) => setChamadosImplantacao(dados))
         .catch((error) => console.error("Erro ao buscar dados:", error));
     }, [paginas, itens]);
 
     useEffect(() => {
-      fetch(`${process.env.APP_URL}chamados/customizacao/usuarioCustomizacao?paginas=${paginas}&itens=${itens}`)
+      fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/customizacao/usuarioCustomizacao?paginas=${paginas}&itens=${itens}`)
         .then((res) => res.json())
         .then((dados) => setChamadosCustomizacao(dados))
         .catch((error) => console.error("Erro ao buscar dados:", error));
@@ -122,7 +127,9 @@ function App() {
  location.pathname !== "/ChamadoUser" && location.pathname !== "/RelatorioStatusChamados"
  && location.pathname !== "/ChamadosSetorAberto" && location.pathname !== "/UserSoftlineListagem" &&
   location.pathname !== "/Login" && location.pathname !== "/NovosClientes" && location.pathname !== "/" &&
- location.pathname !== "/components/userSoftline/UserSoftlineListagem" && <UserHeaders />}
+ location.pathname !== "/components/userSoftline/UserSoftlineListagem" &&
+ location.pathname !== "/ListaNovosClientes" && location.pathname !== "/AvaliacaoCliente" && location.pathname !== "/nao-autorizado" &&
+  <UserHeaders />}
 
 
 
@@ -131,9 +138,16 @@ function App() {
              <Routes>
 
 
+
+
                <Route path="/" element={<Login />} />
 
             <Route path="/not-found" element={<NotFound />} />
+
+
+           <Route path="/nao-autorizado" element={<NaoAutorizado />} />
+
+           <Route path="/AvaliacaoCliente" element={<AvaliacaoCliente />} />
 
 
                {/* Rota para o componente UserHeaders */}
@@ -161,6 +175,7 @@ function App() {
               <Route path="/ChamadosSetorAberto" element={<ChamadosSetorAberto />} />
               <Route path="/components/userSoftline/UserSoftlineListagem" element={<UserSoftlineListagem />} />
              <Route path="/NovosClientes" element={<NovosClientes />} />
+             <Route path="/ListaNovosClientes" element={<ListaNovosClientes />} />
 
             </Routes>
 

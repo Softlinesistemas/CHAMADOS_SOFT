@@ -1,5 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+//import Notifications from "../../Notifications";
+
+
+ // Importamos o componente
 
  {/*import ChamadoNotification from "../adminSoftLine/ChamadoNotification"; */}
 
@@ -48,6 +52,7 @@ export default function AdminHeaders() {
           <ul className="dropdown-menu">
             <li><a className="dropdown-item" href="/RelatorioStatusChamados">Relatório dos Status dos chamados</a></li>
             <li><a className="dropdown-item" href="/ChamadosSetorAberto">Relatório dos setores em análise/em aberto</a></li>
+            <li><a className="dropdown-item" href="/AvaliacaoCliente">Relatório da avaliação dos chamados pelos clientes</a></li>
 <li>
   <a
     className="dropdown-item"
@@ -65,8 +70,7 @@ export default function AdminHeaders() {
       {/* Ícone antes do botão Sair */}
       <div className="d-flex align-items-center" style={{ marginLeft: "20px" }}>
 
-
-     {/* <ChamadoNotification /> */}
+       {/* Adicionamos o ícone de notificação   <Notifications />*/}
 
 
         <button

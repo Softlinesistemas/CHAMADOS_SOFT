@@ -8,6 +8,7 @@ import AdminHeaders from '../headers/AdminHeaders'; // Certifique-se de que o ca
 export default function AdminSoftLineListagem({ vetor = [] }) {
 
 
+  const [colaborador, setColaborador] = useState('');
   const [ticket, setTicket] = useState('');
   const [resultados, setResultados] = useState([]);
   const [mensagemErro, setMensagemErro] = useState('');
@@ -24,11 +25,42 @@ export default function AdminSoftLineListagem({ vetor = [] }) {
 
  const [cnpj, setCnpj] = useState('');  // Estado para armazenar o CNPJ
 
+
+
+ const buscarPorColaborador = async () => {
+
+ if (!colaborador.trim()) {
+     setMensagemErro('Por favor, insira um nome válido.');
+     return;
+   }
+
+   try {
+     const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/listarPorColaborador?nome=${colaborador}`);
+
+     if (response.status === 204) {
+       setResultados([]);
+       setMensagemErro('Nenhum colaborador encontrado!!');
+     } else if (response.ok) {
+       const data = await response.json();
+       setResultados(data);
+       setMensagemErro('');
+     } else {
+       const errorText = await response.text(); // Captura o corpo da resposta em caso de erro
+       setMensagemErro(`Erro ao buscar os dados: ${errorText}`);
+     }
+   } catch (error) {
+     setMensagemErro('Erro na comunicação com o servidor.');
+   }
+ };
+
+
+
+
 /*
 
 const fetchCnpj = async () => {
   try {
-    const response = await fetch(`${process.env.APP_URL}usuario/listarCnpj`, {
+    const response = await fetch('https://chamados-softline-k3bsb.ondigitalocean.app/usuario/listarCnpj', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -73,19 +105,19 @@ const fetchCnpj = async () => {
 
   const fetchOptions = async () => {
     try {
-      const assuntosResponse = await fetch(`${process.env.APP_URL}chamados/user/userListAssuntos`);
+      const assuntosResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos");
       if (assuntosResponse.ok) {
         const assuntosData = await assuntosResponse.json();
         setAssuntos(assuntosData);
       }
 
-      const statusResponse = await fetch(`${process.env.APP_URL}chamados/user/userStatusChamados`);
+      const statusResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados");
       if (statusResponse.ok) {
         const statusData = await statusResponse.json();
         setStatusList(statusData);
       }
 
-      const colaboradoresResponse = await fetch(`${process.env.APP_URL}chamados/user/userListColaboradores`);
+      const colaboradoresResponse = await fetch("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores");
       if (colaboradoresResponse.ok) {
         const colaboradoresData = await colaboradoresResponse.json();
         setColaboradores(colaboradoresData);
@@ -99,6 +131,11 @@ const fetchCnpj = async () => {
     fetchOptions();
   }, []);
 
+
+
+
+
+
   const abrirModal = (chamado) => {
     setChamadoSelecionado({ ...chamado });
     setModalAberto(true);
@@ -111,7 +148,7 @@ const fetchCnpj = async () => {
 
   const atualizarChamado = async () => {
     try {
-      const response = await fetch(`${process.env.APP_URL}chamados/user/atualizar/${chamadoSelecionado.id}`, {
+      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/atualizar/${chamadoSelecionado.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +175,7 @@ const fetchCnpj = async () => {
   const excluirChamado = async (id) => {
     if (window.confirm("Você tem certeza que deseja excluir este chamado?")) {
       try {
-        const response = await fetch(`${process.env.APP_URL}chamados/excluir/${id}`, {
+        const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/excluir/${id}`, {
           method: 'DELETE',
         });
 
@@ -163,7 +200,7 @@ const fetchCnpj = async () => {
 const buscarChamadosPaginados = async () => {
     try {
       const response = await fetch(
-        `${process.env.APP_URL}chamados/user/userListChamados?paginas=${paginaAtual}&itens=${itensPorPagina}`
+        `https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListChamados?paginas=${paginaAtual}&itens=${itensPorPagina}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -189,7 +226,7 @@ const buscarChamadosPaginados = async () => {
    }
 
    try {
-     const response = await fetch(`${process.env.APP_URL}chamados/user/softline/buscarChamados?ticket=${ticket}`);
+     const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/softline/buscarChamados?ticket=${ticket}`);
 
      if (response.status === 204) {
        setResultados([]);
@@ -209,6 +246,36 @@ const buscarChamadosPaginados = async () => {
 
 
 
+useEffect(() => {
+    const token = localStorage.getItem("token"); // Recupera o token do localStorage
+    if (!token) {
+        // Redireciona para a página de não autorizado
+        window.location.href = "/nao-autorizado";
+        return;
+    }
+
+    const fetchChamados = async () => {
+        try {
+            const response = await axios.get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListChamados", {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+                },
+            });
+            setResultados(response.data);
+
+        } catch (err) {
+            if (err.response && err.response.status === 403) {
+                // Redireciona para a página de não autorizado
+                window.location.href = "/nao-autorizado";
+            } else {
+                //setMensagemErro("Erro ao buscar chamados. Tente novamente mais tarde.");
+            }
+        }
+    };
+
+    fetchChamados();
+}, []);
+
 
 
   return (
@@ -219,38 +286,72 @@ const buscarChamadosPaginados = async () => {
 
  <br />
 
-
-
-
-
-
-
       <h1 className="custom-header d-flex justify-content-center" role="alert">Lista dos chamados-ADMIN</h1>
 
   <br />
 
-      {/* Div de busca por ticket */}
-      <div className="d-flex justify-content-center mb-4">
-        <input
-          type="text"
-          className="form-control rounded-pill border border-success w-50"
-          placeholder="Digite o número do chamado"
-          value={ticket}
-          onChange={(e) => setTicket(e.target.value)}
-        />
-        <button className="btn btn-success rounded-pill ms-2" onClick={buscarPorTicket}>
-          Buscar
-        </button>
-      </div>
+       <div>
+            {/* Div de busca por ticket e colaborador */}
+            <div className="d-flex justify-content-start mb-4">
+              {/* Div de busca por ticket */}
+              <div className="d-flex align-items-center me-3">
+                <input
+                  type="text"
+                  className="form-control rounded-pill border border-success me-2"
+                  style={{ width: "300px" }}
+                  placeholder="Digite o número do chamado"
+                  value={ticket}
+                  onChange={(e) => setTicket(e.target.value)}
+                />
+                <button className="btn btn-success rounded-pill" onClick={buscarPorTicket}>
+                  Buscar
+                </button>
+
+
+
+
+              </div>
+
+              {/* Div de busca por colaborador */}
+              <div className="d-flex align-items-center">
+                <input
+                  type="text"
+                  className="form-control rounded-pill border border-success me-2"
+                  style={{ width: "300px" }}
+                  placeholder="Digite o nome do colaborador"
+                  value={colaborador}
+                  onChange={(e) => setColaborador(e.target.value)}
+                />
+                <button className="btn btn-success rounded-pill" onClick={buscarPorColaborador}>
+                  Buscar
+                </button>
+              </div>
+            </div>
+
+          </div>
+
 
       {mensagemErro && <p className="text-danger text-center">{mensagemErro}</p>}
 
 
+                         <div className="d-flex align-items-center ms-0">
+                                 <span className="me-2" style={{ color: 'blue' }}>•</span> {/* Ponto azul */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Bom</span>
+
+                                 <span className="me-2" style={{ color: 'green' }}>•</span> {/* Ponto verde */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Excelente</span>
+
+                                 <span className="me-2" style={{ color: 'orange' }}>•</span> {/* Ponto amarelo */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Regular</span>
+
+                                 <span className="me-2" style={{ color: 'red' }}>•</span> {/* Ponto vermelho */}
+                                 <span className="me-3" style={{ fontSize: '0.9rem' }}>Ruim</span>
+                         </div>
 
       <table className="table table-success table-striped">
         <thead>
           <tr>
-
+             <th>Pesquisa</th>
              <th>Ticket</th>
              <th>Horário</th>
             <th>Empresa</th>
@@ -290,6 +391,13 @@ const buscarChamadosPaginados = async () => {
              >
 
 
+           <td>
+
+               {objeto.pesquisa === "Ruim" && <span className="ms-2 text-danger pisca">&#x2B24;</span>}
+               {objeto.pesquisa === "Bom" && <span className="ms-2 text-primary pisca">&#x2B24;</span>}
+               {objeto.pesquisa === "Regular" && <span className="ms-2 text-warning pisca">&#x2B24;</span>}
+               {objeto.pesquisa === "Excelente" && <span className="ms-2 text-success pisca">&#x2B24;</span>}
+           </td>
 
                <td>{objeto.ticket}</td>
                 <td>{objeto.horario}</td>
@@ -304,7 +412,7 @@ const buscarChamadosPaginados = async () => {
                <td>{objeto.dataConclusao}</td>
 
                <td>
-                    <a href={`${process.env.APP_URL}chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
+                    <a href={`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/download/${objeto.id}`} target="_blank" rel="noopener noreferrer">
                                  {objeto.name}
                      </a>
                 </td>

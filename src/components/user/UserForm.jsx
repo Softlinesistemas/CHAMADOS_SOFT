@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Importe o useNavigate
+
 
 function UserForm() {
+        const navigate = useNavigate(); // Hook para redirecionamento
+
   const [statusChamados, setStatusChamados] = useState([]);
   const [assuntos, setAssuntos] = useState([]);
   const [colaboradores, setColaboradores] = useState([]);
@@ -14,13 +18,14 @@ function UserForm() {
     reclamacao: "", // Adicionando o campo de reclamação
   });
 
+{/*
   useEffect(() => {
     // Obtém o token do localStorage
     const token = localStorage.getItem("token");
 
     // Carrega os dados do usuário logado
     axios
-      .get(`${process.env.APP_URL}chamados/user/me`, {
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/me", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -37,20 +42,72 @@ function UserForm() {
 
     // Carregar listas (statusChamados, assuntos, colaboradores)
     axios
-      .get(`${process.env.APP_URL}chamados/user/userStatusChamados`)
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados")
       .then((response) => setStatusChamados(response.data))
       .catch((error) => console.error("Erro ao carregar status chamados:", error));
 
     axios
-      .get(`${process.env.APP_URL}chamados/user/userListAssuntos`)
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos")
       .then((response) => setAssuntos(response.data))
       .catch((error) => console.error("Erro ao carregar assuntos:", error));
 
     axios
-      .get(`${process.env.APP_URL}chamados/user/userListColaboradores`)
+      .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores")
       .then((response) => setColaboradores(response.data))
       .catch((error) => console.error("Erro ao carregar colaboradores:", error));
   }, []);
+*/}
+
+// Verifica se o usuário está autenticado ao carregar o componente
+    useEffect(() => {
+        const token = localStorage.getItem("token"); // Recupera o token do localStorage
+        if (!token) {
+            navigate("/nao-autorizado"); // Redireciona para a página de não autorizado
+        } else {
+            // Carrega os dados do usuário logado
+            axios
+                .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/me", {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                    const { nome, email, empresa, cnpj } = response.data;
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        nome,
+                        email,
+                        empresa,
+                        cnpj,
+                    }));
+                })
+                .catch((error) => {
+                    if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+                        navigate("/nao-autorizado"); // Redireciona para a página de não autorizado
+                    } else {
+                        console.error("Erro ao obter usuário:", error);
+                    }
+                });
+
+            // Carregar listas (statusChamados, assuntos, colaboradores)
+            axios
+                .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userStatusChamados")
+                .then((response) => setStatusChamados(response.data))
+                .catch((error) => console.error("Erro ao carregar status chamados:", error));
+
+            axios
+                .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListAssuntos")
+                .then((response) => setAssuntos(response.data))
+                .catch((error) => console.error("Erro ao carregar assuntos:", error));
+
+            axios
+                .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/userListColaboradores")
+                .then((response) => setColaboradores(response.data))
+                .catch((error) => console.error("Erro ao carregar colaboradores:", error));
+        }
+    }, [navigate]);
+
+
+
+
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -89,7 +146,7 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    await axios.post(`${process.env.APP_URL}chamados/user/cadastrar`, data, {
+    await axios.post("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/cadastrar", data, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
