@@ -13,7 +13,8 @@ import UserSoftLineHeaders from "../headers/UserSoftLineHeaders"
 function UserSoftLineForm() {
 
     const navigate = useNavigate(); // Hook para redirecionamento
-
+    const [isLoading, setIsLoading] = useState(false);
+    
   const [statusChamados, setStatusChamados] = useState([]);
    const [assuntos, setAssuntos] = useState([]);
    const [colaboradores, setColaboradores] = useState([]);
@@ -126,7 +127,8 @@ function UserSoftLineForm() {
 
    const handleSubmit = async (e) => {
      e.preventDefault();
-
+     setIsLoading(true); // Ativa o estado de loading
+       
      const token = localStorage.getItem("token");
      const data = new FormData();
 
@@ -156,11 +158,18 @@ function UserSoftLineForm() {
            Authorization: `Bearer ${token}`,
          },
        });
-       alert("Chamado registrado com sucesso!");
+         alert("Chamado registrado com sucesso!");
+         navigate("/components/userSoftline/UserSoftlineListagem");
      } catch (error) {
        console.error("Erro ao criar chamado:", error.response);
        alert(`Erro: ${error.response?.data?.message || "Erro ao criar chamado"}`);
+     } finally {
+
+               setIsLoading(false); // Desativa o estado de loading independente do resultado
+
      }
+
+       
    };
 
    return (
@@ -324,13 +333,30 @@ function UserSoftLineForm() {
            </div>
          </div>
 
+                     {/*
                      <div className="row mt-4">
                        <div className="col text-center">
                          <button type="submit" className="btn btn-primary rounded-pill">
                            Registrar
                          </button>
                        </div>
-                     </div>
+                     </div>  */}
+
+       <button
+                              type="submit"
+                              className="btn btn-primary rounded-pill"
+                              disabled={isLoading}
+                            >
+                              {isLoading ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                  <span className="ms-2">Enviando...</span>
+                                </>
+                              ) : (
+                                "Registrar"
+                              )}
+       </button>
+           
        </form>
      </>
    );
