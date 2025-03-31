@@ -7,7 +7,7 @@ import ListaNovosClientes from './ListaNovosClientes';
 
 export default function NovosClientes() {
 
-
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate(); // Hook para redirecionamento
     const [formData, setFormData] = useState({
 
@@ -86,6 +86,7 @@ export default function NovosClientes() {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Ativa o estado de loading
     console.log("Dados do formulário:", formData); // Verifique se os campos estão preenchidos
 
     try {
@@ -100,6 +101,7 @@ const handleSubmit = async (e) => {
       if (response.ok) {
         const data = await response.json();
         alert("Cliente cadastrado com sucesso!");
+        navigate("/ListaNovosClientes");
         console.log("Cliente cadastrado:", data);
         // Limpar o formulário após o sucesso
         setFormData({
@@ -202,6 +204,15 @@ const handleSubmit = async (e) => {
 
     <div className="container">
          <AdminHeaders />
+
+     {isLoading && (
+                    <div className="loading-overlay">
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+    )}
+        
       <h2 className="alert alert-primary my-4 text-center" role="alert">Formulário do Novo Cliente</h2>
       <form onSubmit={handleSubmit}>
         <div className="row g-3 border border-4">
@@ -667,9 +678,20 @@ const handleSubmit = async (e) => {
 
 
           <div className="col-md-12 text-center">
-            <button type="submit" className="btn btn-primary rounded-pill">
-              Salvar
-            </button>
+            <button
+                          type="submit"
+                          className="btn btn-primary rounded-pill"
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              <span className="ms-2">Enviando...</span>
+                            </>
+                          ) : (
+                            "Registrar"
+                          )}
+             </button>
           </div>
         </div>
       </form>
