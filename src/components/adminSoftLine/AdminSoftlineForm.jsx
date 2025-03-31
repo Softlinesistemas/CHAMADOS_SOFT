@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"; // Importe o useNavigate
 
 function AdminSoftlineForm() {
 
-
+const [isLoading, setIsLoading] = useState(false);
  const navigate = useNavigate(); // Hook para redirecionamento
 
   const [statusChamados, setStatusChamados] = useState([]);
@@ -126,6 +126,7 @@ function AdminSoftlineForm() {
 
    const handleSubmit = async (e) => {
      e.preventDefault();
+    setIsLoading(true); // Ativa o estado de loading
 
      const token = localStorage.getItem("token");
      const data = new FormData();
@@ -157,16 +158,31 @@ function AdminSoftlineForm() {
          },
        });
        alert("Chamado registrado com sucesso!");
+       navigate("/components/adminSoftLine/AdminSoftLineListagem"); // Redireciona após sucesso
      } catch (error) {
        console.error("Erro ao criar chamado:", error.response);
        alert(`Erro: ${error.response?.data?.message || "Erro ao criar chamado"}`);
+     } finally {
+          setIsLoading(false); // Desativa o estado de loading independente do resultado
+
      }
+
+    
    };
 
    return (
      <>
 
      <AdminHeaders />
+
+      {isLoading && (
+           <div className="loading-overlay">
+             <div className="spinner-border text-primary" role="status">
+               <span className="visually-hidden">Loading...</span>
+             </div>
+           </div>
+     )}
+      
        <h2 className="alert alert-info text-center">Registrar um Novo Chamado</h2>
        <form onSubmit={handleSubmit} className="container mt-5">
          <div className="border border-primary p-4">
@@ -324,13 +340,30 @@ function AdminSoftlineForm() {
            </div>
          </div>
 
-                     <div className="row mt-4">
+                     {/* <div className="row mt-4">
                        <div className="col text-center">
                          <button type="submit" className="btn btn-primary rounded-pill">
                            Registrar
                          </button>
                        </div>
-                     </div>
+                     </div>*/}
+
+            <button
+              type="submit"
+              className="btn btn-primary rounded-pill"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span className="ms-2">Enviando...</span>
+                </>
+              ) : (
+                "Registrar"
+              )}
+            </button>
+
+        
        </form>
      </>
    );
