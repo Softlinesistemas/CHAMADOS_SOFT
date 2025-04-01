@@ -252,7 +252,7 @@ const [isLoading, setIsLoading] = useState(false);
                        >
                          <option value="">Selecione um assunto</option>
                          {assuntos.map((assunto, index) => (
-                           <option key={assunto.id} value={assunto.id} disabled={index !== 0}>
+                           <option key={assunto.id} value={assunto.id}>
                              {assunto.descricao}
                            </option>
                          ))}
@@ -270,7 +270,7 @@ const [isLoading, setIsLoading] = useState(false);
                        >
                          <option value="">Selecione o status</option>
                          {statusChamados.map((status, index) => (
-                           <option key={status.id} value={status.id} disabled={index !== 0}>
+                           <option key={status.id} value={status.id}>
                              {status.status}
                            </option>
                          ))}
