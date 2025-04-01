@@ -231,7 +231,7 @@ const fetchOptions = async () => {
                       <th>Assunto</th>
                       <th>Status</th>
                       <th>Colaborador</th>
-                      <th>Reclamação</th>
+                       {/* <th>Reclamação</th> */}
                       <th>Ações</th>
                     </tr>
                   </thead>
