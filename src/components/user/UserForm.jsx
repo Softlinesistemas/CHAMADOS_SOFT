@@ -129,17 +129,17 @@ const handleSubmit = async (e) => {
   const token = localStorage.getItem("token");
   const data = new FormData();
 
-  const chamadoData = {
-    nome: formData.nome,
-    email: formData.email,
-    empresa: formData.empresa,
-    cnpj: formData.cnpj,
-    //statuschamados: { id: formData.statuschamados },
-    //assuntos: { id: formData.assuntos },
-   // colaboradores: { id: formData.colaboradores },
-    justificativa: formData.justificativa,
-   // reclamacao: formData.reclamacao,
-  };
+       const chamadoData = {
+             nome: formData.nome,
+             email: formData.email,
+             empresa: formData.empresa,
+             cnpj: formData.cnpj,
+             statuschamados: { id: 1 },
+             assuntos: { id: 1 },
+             colaboradores: { id:1 },
+             justificativa: formData.justificativa,
+
+           };
 
   data.append("chamado", new Blob([JSON.stringify(chamadoData)], { type: "application/json" }));
 
@@ -160,11 +160,11 @@ const handleSubmit = async (e) => {
     // 🔹 Limpar os campos do formulário após sucesso
     setFormData({
       arquivo: null,
-      statuschamados: "",
-      assuntos: "",
-      colaboradores: "",
+     // statuschamados: "",
+      //assuntos: "",
+    //  colaboradores: "",
       justificativa: "",
-      reclamacao: "",
+     // reclamacao: "",
     });
 
     // 🔹 Limpar o campo de arquivo manualmente
