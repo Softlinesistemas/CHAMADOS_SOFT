@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function UserSoftlineListagem({ vetor = [] }) {
-
+  
+const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
 const navigate = useNavigate();
 
 const [colaborador, setColaborador] = useState('');
@@ -110,6 +111,9 @@ const [colaborador, setColaborador] = useState('');
   };
 
   const atualizarChamado = async () => {
+
+     setIsLoadingUpdate(true); // Ativa o estado de loading
+    
     try {
       const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/atualizar/${chamadoSelecionado.id}`, {
         method: 'PUT',
@@ -130,7 +134,9 @@ const [colaborador, setColaborador] = useState('');
       }
     } catch (error) {
       alert('Erro na comunicação com o servidor.');
-    }
+    } finally {
+          setIsLoadingUpdate(false); // Desativa o estado de loading
+        }
   };
 
 
@@ -528,9 +534,28 @@ const [colaborador, setColaborador] = useState('');
                 <button type="button" className="btn btn-secondary rounded-pill" onClick={fecharModal}>
                   Cancelar
                 </button>
+
+                {/*  
                 <button type="button" className="btn btn-primary rounded-pill" onClick={atualizarChamado}>
                   Salvar
-                </button>
+                </button>  */}
+
+                  <button
+                type="button"
+                className="btn btn-primary rounded-pill"
+                onClick={atualizarChamado}
+                disabled={isLoadingUpdate}
+              >
+                {isLoadingUpdate ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span className="ms-2">Salvando...</span>
+                  </>
+                ) : (
+                  'Salvar'
+                )}
+              </button>
+                
               </div>
             </div>
           </div>
