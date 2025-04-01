@@ -288,7 +288,7 @@ const [isLoading, setIsLoading] = useState(false);
                         >
                           <option value="">Selecione um colaborador</option>
                           {colaboradores.map((colaborador, index) => (
-                            <option key={colaborador.id} value={colaborador.id} disabled={index !== 0}>
+                            <option key={colaborador.id} value={colaborador.id}>
                               {colaborador.nome}
                             </option>
                           ))}
