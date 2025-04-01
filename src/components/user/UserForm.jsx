@@ -12,11 +12,11 @@ function UserForm() {
   const [colaboradores, setColaboradores] = useState([]);
   const [formData, setFormData] = useState({
     arquivo: null,
-    statuschamados: "",
-    assuntos: "",
-    colaboradores: "",
+   // statuschamados: "",
+   // assuntos: "",
+    //colaboradores: "",
     justificativa: "",
-    reclamacao: "", // Adicionando o campo de reclamação
+   // reclamacao: "", // Adicionando o campo de reclamação
   });
 
 {/*
@@ -134,11 +134,11 @@ const handleSubmit = async (e) => {
     email: formData.email,
     empresa: formData.empresa,
     cnpj: formData.cnpj,
-    statuschamados: { id: formData.statuschamados },
-    assuntos: { id: formData.assuntos },
-    colaboradores: { id: formData.colaboradores },
+    //statuschamados: { id: formData.statuschamados },
+    //assuntos: { id: formData.assuntos },
+   // colaboradores: { id: formData.colaboradores },
     justificativa: formData.justificativa,
-    reclamacao: formData.reclamacao,
+   // reclamacao: formData.reclamacao,
   };
 
   data.append("chamado", new Blob([JSON.stringify(chamadoData)], { type: "application/json" }));
@@ -182,191 +182,118 @@ const handleSubmit = async (e) => {
 };
 
 
-  return (
-    <>
-      <h2 className="alert alert-info text-center">Registrar um Novo Chamado</h2>
-      <form onSubmit={handleSubmit} className="container mt-5">
-        <div className="border border-primary p-4">
-          <div className="row">
-            <div className="col-md-6 form-group">
-              <label htmlFor="nome">Nome:</label>
-              <input
-                type="text"
-                name="nome"
-                id="nome"
-                className="form-control border border-primary"
-                value={formData.nome || ""}  disabled
+return (
+        <>
+            <h2 className="alert alert-info text-center">Registrar um Novo Chamado</h2>
+            <form onSubmit={handleSubmit} className="container mt-5">
+                <div className="border border-primary p-4">
+                    <div className="row">
+                        <div className="col-md-6 form-group">
+                            <label htmlFor="nome">Nome:</label>
+                            <input
+                                type="text"
+                                name="nome"
+                                id="nome"
+                                className="form-control border border-primary"
+                                value={formData.nome || ""}
+                                disabled
+                            />
+                        </div>
 
-              />
-            </div>
-
-            <div className="col-md-6 form-group">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="form-control border border-primary"
-                value={formData.email || ""} disabled
-
-              />
-            </div>
-          </div>
-
-          <div className="row mt-3">
-            <div className="col-md-6 form-group">
-              <label htmlFor="empresa">Empresa:</label>
-              <input
-                type="text"
-                name="empresa"
-                id="empresa"
-                className="form-control border border-primary"
-                value={formData.empresa || ""} disabled
-
-              />
-            </div>
-
-            <div className="col-md-6 form-group">
-              <label htmlFor="cnpj">CNPJ:</label>
-              <input
-                type="text"
-                name="cnpj"
-                id="cnpj"
-                className="form-control border border-primary"
-                value={formData.cnpj || ""} disabled
-
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-primary p-4">
-          <div className="row">
-            <div className="col-md-4 form-group">
-                      <label htmlFor="assuntos">Assunto:</label>
-                      <select
-                        name="assuntos"
-                        id="assuntos"
-                        className="form-control border border-primary"
-                        value={formData.assuntos}
-                        onChange={handleChange}
-                      >
-                        <option value="">Selecione um assunto</option>
-                        {assuntos.map((assunto, index) => (
-                          <option key={assunto.id} value={assunto.id} disabled={index !== 0}>
-                            {assunto.descricao}
-                          </option>
-                        ))}
-                      </select>
+                        <div className="col-md-6 form-group">
+                            <label htmlFor="email">Email:</label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                className="form-control border border-primary"
+                                value={formData.email || ""}
+                                disabled
+                            />
+                        </div>
                     </div>
 
-             <div className="col-md-4 form-group">
-                      <label htmlFor="statuschamados">Status do Chamado:</label>
-                      <select
-                        name="statuschamados"
-                        id="statuschamados"
-                        className="form-control border border-success"
-                        value={formData.statuschamados}
-                        onChange={handleChange}
-                      >
-                        <option value="">Selecione o status</option>
-                        {statusChamados.map((status, index) => (
-                          <option key={status.id} value={status.id} disabled={index !== 0}>
-                            {status.status}
-                          </option>
-                        ))}
-                      </select>
+                    <div className="row mt-3">
+                        <div className="col-md-6 form-group">
+                            <label htmlFor="empresa">Empresa:</label>
+                            <input
+                                type="text"
+                                name="empresa"
+                                id="empresa"
+                                className="form-control border border-primary"
+                                value={formData.empresa || ""}
+                                disabled
+                            />
+                        </div>
+
+                        <div className="col-md-6 form-group">
+                            <label htmlFor="cnpj">CNPJ:</label>
+                            <input
+                                type="text"
+                                name="cnpj"
+                                id="cnpj"
+                                className="form-control border border-primary"
+                                value={formData.cnpj || ""}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="border border-primary p-4">
+                    <div className="row">
+                        
                     </div>
 
-            <div className="col-md-4 form-group">
-              <label htmlFor="colaboradores">Colaborador:</label>
-                       <select
-                         name="colaboradores"
-                         id="colaboradores"
-                         className="form-control border border-warning"
-                         value={formData.colaboradores}
-                         onChange={handleChange}
-                       >
-                         <option value="">Selecione um colaborador</option>
-                         {colaboradores.map((colaborador, index) => (
-                           <option key={colaborador.id} value={colaborador.id} disabled={index !== 0}>
-                             {colaborador.nome}
-                           </option>
-                         ))}
-                       </select>
-                     </div>
-          </div>
+                    <div className="row mt-3">
+                        <div className="col-md-12 form-group">
+                            <label htmlFor="justificativa">Justificativa:</label>
+                            <textarea
+                                name="justificativa"
+                                id="justificativa"
+                                className="form-control border border-danger"
+                                rows="8"
+                                placeholder="Digite aqui a sua solicitação..."
+                                value={formData.justificativa}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </div>
 
-          <div className="row mt-3">
-            <div className="col-md-12 form-group">
-              <label htmlFor="justificativa">Justificativa:</label>
-              <textarea
-                name="justificativa"
-                id="justificativa"
-            className="form-control border border-danger" rows="8" placeholder="Digite aqui a sua solicitação..."
+                   
 
-                value={formData.justificativa}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
+                    <div className="row mt-3">
+                        <div className="col-md-12 form-group">
+                            <label htmlFor="arquivo">Anexar Arquivo:</label>
+                            <input
+                                type="file"
+                                name="arquivo"
+                                id="arquivo"
+                                className="form-control border border-primary"
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+                </div>
 
-          <div className="row mt-3">
-            <div className="col-md-12 form-group">
-              <label htmlFor="reclamacao">Reclamação:</label>
-              <textarea
-                name="reclamacao"
-                id="reclamacao"
-                className="form-control border border-info" rows="8"
-
-                value={formData.reclamacao}
-                onChange={handleChange}
-                placeholder="Descreva sua reclamação (se houver)"
-              />
-            </div>
-          </div>
-
-          <div className="row mt-3">
-            <div className="col-md-12 form-group">
-              <label htmlFor="arquivo">Anexar Arquivo:</label>
-              <input
-                type="file"
-                name="arquivo"
-                id="arquivo"
-                className="form-control border border-primary"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        </div>
-
-                        {/* <div className="row mt-4">
-                       <div className="col text-center">
-                         <button type="submit" className="btn btn-primary rounded-pill">
-                           Registrar
-                         </button>
-                       </div>
-                     </div>*/}
-
-            <button
-              type="submit"
-              className="btn btn-primary rounded-pill"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  <span className="ms-2">Enviando...</span>
-                </>
-              ) : (
-                "Registrar"
-              )}
-            </button>
-              
-      </form>
-    </>
-  );
+                <button
+                    type="submit"
+                    className="btn btn-primary rounded-pill"
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span className="ms-2">Enviando...</span>
+                        </>
+                    ) : (
+                        "Registrar"
+                    )}
+                </button>
+            </form>
+        </>
+    );
 }
 
 export default UserForm;
