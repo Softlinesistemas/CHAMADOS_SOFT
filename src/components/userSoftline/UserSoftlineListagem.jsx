@@ -278,7 +278,7 @@ const [colaborador, setColaborador] = useState('');
             <th>Empresa</th>
             <th>Nome</th>
              <th>Solicitação</th>
-            <th>Reclamação</th>
+            {/*  <th>Reclamação</th> */}
             <th>CNPJ</th>
             <th>Data</th>
             <th>Dias</th>
@@ -329,7 +329,7 @@ const [colaborador, setColaborador] = useState('');
 
 
 
-              <td>{objeto.reclamacao}</td>
+              {/*  <td>{objeto.reclamacao}</td> */}
 
               <td>{objeto.cnpj}</td>
               <td>{objeto.data}</td>
