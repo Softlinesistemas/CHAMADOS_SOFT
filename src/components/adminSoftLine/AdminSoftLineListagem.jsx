@@ -357,7 +357,7 @@ useEffect(() => {
             <th>Empresa</th>
             <th>Nome</th>
              <th>Solicitação</th>
-            <th>Reclamação</th>
+            {/* <th>Reclamação</th> */}
             <th>CNPJ</th>
             <th>Data</th>
             <th>Dias</th>
@@ -404,7 +404,7 @@ useEffect(() => {
               <td>{objeto.empresa}</td>
               <td>{objeto.nome}</td>
                <td>{objeto.justificativa}</td>
-              <td>{objeto.reclamacao}</td>
+             {/* <td>{objeto.reclamacao}</td>  */}
 
               <td>{objeto.cnpj}</td>
               <td>{objeto.data}</td>
