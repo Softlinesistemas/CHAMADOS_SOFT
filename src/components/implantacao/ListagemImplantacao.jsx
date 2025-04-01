@@ -268,10 +268,10 @@ const fetchOptions = async () => {
                             {objeto.name}
                           </a>
                         </td>
-                        <td>{objeto.assuntos?.descricao}</td>
-                        <td>{objeto.statuschamados?.status}</td>
-                        <td>{objeto.colaboradores?.nome}</td>
-                        <td>{objeto.reclamacao}</td>
+                                     <td>{objeto.assuntos?.descricao ?? "Não informado"}</td>
+                                     <td>{objeto.statuschamados?.status ?? "Não informado"}</td>
+                                     <td>{objeto.colaboradores?.nome ?? "Não atribuído"}</td>
+                                     <td>{objeto.reclamacao ?? "Nenhuma reclamação registrada"}</td>
                         <td>
                           <button className="btn btn-warning rounded-pill px-3" type="button" onClick={() => abrirModal(objeto)}>Editar</button>
                         </td>
