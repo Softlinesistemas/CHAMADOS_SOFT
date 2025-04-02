@@ -23,6 +23,8 @@ const navigate = useNavigate();
     const [modalAberto, setModalAberto] = useState(false); // Estado para controlar o modal
     const [chamadoSelecionado, setChamadoSelecionado] = useState(null); // Estado para armazenar o chamado selecionado
 
+   // Adicione este estado no início do componente
+const [isLoadingBusca, setIsLoadingBusca] = useState(false);
 
  // Função para verificar se o usuário está autorizado
   const verificarAutorizacao = () => {
@@ -173,7 +175,9 @@ const fetchOptions = async () => {
         setMensagemErro('Por favor, insira um ticket válido.');
         return;
       }
-
+      
+  setIsLoadingBusca(true);
+      
       try {
         const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/implantacao/buscarImplantacao?ticket=${ticket}`);
         if (response.status === 204) {
@@ -188,7 +192,9 @@ const fetchOptions = async () => {
         }
       } catch (error) {
         setMensagemErro('Erro na comunicação com o servidor.');
-      }
+      } finally {
+               setIsLoadingBusca(false);
+             }
     };
 
 
@@ -213,9 +219,21 @@ const fetchOptions = async () => {
                         value={ticket}
                         onChange={(e) => setTicket(e.target.value)}
                       />
-                      <button className="btn btn-success rounded-pill ms-2" onClick={buscarPorTicket}>
-                        Buscar
-                      </button>
+                 <button
+                    className="btn btn-success rounded-pill"
+                    onClick={buscarPorTicket}
+                    disabled={isLoadingBusca}
+                  >
+                    {isLoadingBusca ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span className="ms-2">Buscando...</span>
+                      </>
+                    ) : (
+                      'Buscar'
+                    )}
+                  </button>
+                       
                     </div>
 
                     {mensagemErro && <p className="text-danger text-center">{mensagemErro}</p>}
