@@ -247,7 +247,7 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
                       />
                <button
                    className="btn btn-success rounded-pill"
-                   onClick={buscarPorColaborador}
+                    onClick={buscarPorTicket}
                    disabled={isLoadingBusca}
                  >
                    {isLoadingBusca ? (
