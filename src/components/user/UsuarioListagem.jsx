@@ -4,7 +4,9 @@ import UserHeaders from "../headers/UserHeaders";
 
 export default function UsuarioListagem({ vetor = [] }) {
 
-
+// Adicione este estado no início do componente
+const [isLoadingBusca, setIsLoadingBusca] = useState(false);
+    
     const navigate = useNavigate();
     const [ticket, setTicket] = useState("");
     const [resultados, setResultados] = useState([]);
@@ -127,6 +129,8 @@ export default function UsuarioListagem({ vetor = [] }) {
             return;
         }
 
+       setIsLoadingBusca(true);
+        
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/buscarChamado?ticket=${ticket}`, {
@@ -147,6 +151,8 @@ export default function UsuarioListagem({ vetor = [] }) {
             }
         } catch (error) {
             setMensagemErro("Erro na comunicação com o servidor.");
+        }  finally {
+                   setIsLoadingBusca(false);
         }
     };
 
@@ -252,9 +258,24 @@ export default function UsuarioListagem({ vetor = [] }) {
                     value={ticket}
                     onChange={(e) => setTicket(e.target.value)}
                 />
-                <button className="btn btn-success rounded-pill ms-2" onClick={buscarPorTicket}>
-                    Buscar
-                </button>
+              
+              <button
+                    className="btn btn-success rounded-pill"
+                    onClick={buscarPorTicket}
+                    disabled={isLoadingBusca}
+                  >
+                    {isLoadingBusca ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span className="ms-2">Buscando...</span>
+                      </>
+                    ) : (
+                      'Buscar'
+                    )}
+              </button>
+
+
+                
             </div>
 
                                       <div className="d-flex align-items-center ms-0">
