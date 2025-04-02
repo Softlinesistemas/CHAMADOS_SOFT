@@ -5,6 +5,8 @@ import AdminHeaders from '../headers/AdminHeaders'; // Certifique-se de que o ca
 
 export default function ListarUsuarios() {
 
+  // Adicione este estado no início do componente
+const [isLoadingBusca, setIsLoadingBusca] = useState(false);
 
   const [usuarios, setUsuarios] = useState([]);
   const [cnpj, setCnpj] = useState('');
@@ -208,6 +210,8 @@ const buscarPorCnpj = async () => {
       return;
     }
 
+ setIsLoadingBusca(true);
+  
     try {
       const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/usuario/admin/buscarUsuarios?cnpj=${cnpj}`);
         console.log("Resposta da API:", response);
@@ -223,6 +227,8 @@ const buscarPorCnpj = async () => {
       }
     } catch (error) {
       setMensagemErro('Erro na comunicação com o servidor.');
+    }  finally {
+               setIsLoadingBusca(false);
     }
   };
 
@@ -248,9 +254,27 @@ const buscarPorCnpj = async () => {
           value={cnpj}
           onChange={(e) => setCnpj(e.target.value)}
         />
+        {/*
         <button className="btn btn-success rounded-pill ms-2" onClick={buscarPorCnpj}>
           Buscar
-        </button>
+        </button> 
+        */}
+
+           <button
+              className="btn btn-success rounded-pill"
+              onClick={buscarPorCnpj}
+              disabled={isLoadingBusca}
+            >
+              {isLoadingBusca ? (
+                <>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span className="ms-2">Buscando...</span>
+                </>
+              ) : (
+                'Buscar'
+              )}
+            </button>
+        
       </div>
 
       {mensagemErro && <p className="text-danger text-center">{mensagemErro}</p>}
