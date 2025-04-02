@@ -285,7 +285,7 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
                    ) : (
                      'Buscar'
                    )}
-               </button>>
+               </button>
 
                       
                     </div>
