@@ -7,7 +7,8 @@ import AdminHeaders from '../headers/AdminHeaders'; // Certifique-se de que o ca
 
 export default function AdminSoftLineListagem({ vetor = [] }) {
 const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
-
+const [isLoadingBusca, setIsLoadingBusca] = useState(false);
+  
   const [colaborador, setColaborador] = useState('');
   const [ticket, setTicket] = useState('');
   const [resultados, setResultados] = useState([]);
@@ -34,6 +35,8 @@ const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
      return;
    }
 
+ setIsLoadingBusca(true);
+   
    try {
      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/listarPorColaborador?nome=${colaborador}`);
 
@@ -50,7 +53,9 @@ const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
      }
    } catch (error) {
      setMensagemErro('Erro na comunicação com o servidor.');
-   }
+   } finally {
+         setIsLoadingBusca(false);
+       }
  };
 
 
@@ -230,6 +235,8 @@ const buscarChamadosPaginados = async () => {
      return;
    }
 
+setIsLoadingBusca(true);
+   
    try {
      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/softline/buscarChamados?ticket=${ticket}`);
 
@@ -246,7 +253,9 @@ const buscarChamadosPaginados = async () => {
      }
    } catch (error) {
      setMensagemErro('Erro na comunicação com o servidor.');
-   }
+   }  finally {
+         setIsLoadingBusca(false);
+       }
  };
 
 
@@ -308,11 +317,26 @@ useEffect(() => {
                   value={ticket}
                   onChange={(e) => setTicket(e.target.value)}
                 />
+                {/*
                 <button className="btn btn-success rounded-pill" onClick={buscarPorTicket}>
                   Buscar
-                </button>
+                </button>  */}
 
 
+<button
+      className="btn btn-success rounded-pill"
+      onClick={buscarPorTicket}
+      disabled={isLoadingBusca}
+    >
+      {isLoadingBusca ? (
+        <>
+          <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span className="ms-2">Buscando...</span>
+        </>
+      ) : (
+        'Buscar'
+      )}
+</button>
 
 
               </div>
@@ -327,9 +351,27 @@ useEffect(() => {
                   value={colaborador}
                   onChange={(e) => setColaborador(e.target.value)}
                 />
+
+                {/*
                 <button className="btn btn-success rounded-pill" onClick={buscarPorColaborador}>
                   Buscar
-                </button>
+                </button>  */}
+
+<button
+     className="btn btn-success rounded-pill"
+     onClick={buscarPorColaborador}
+     disabled={isLoadingBusca}
+   >
+     {isLoadingBusca ? (
+       <>
+         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         <span className="ms-2">Buscando...</span>
+       </>
+     ) : (
+       'Buscar'
+     )}
+</button>
+                
               </div>
             </div>
 
