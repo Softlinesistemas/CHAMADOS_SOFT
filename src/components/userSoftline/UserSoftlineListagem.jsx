@@ -26,6 +26,8 @@ const [colaborador, setColaborador] = useState('');
   const [modalAberto, setModalAberto] = useState(false);
   const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
 
+  // Adicione este estado no início do componente
+const [isLoadingBusca, setIsLoadingBusca] = useState(false);
 
  // Função para verificar se o usuário está autorizado
   const verificarAutorizacao = () => {
@@ -51,6 +53,8 @@ const [colaborador, setColaborador] = useState('');
      return;
    }
 
+ setIsLoadingBusca(true);
+   
    try {
      const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/listarPorColaborador?nome=${colaborador}`);
 
@@ -67,6 +71,8 @@ const [colaborador, setColaborador] = useState('');
      }
    } catch (error) {
      setMensagemErro('Erro na comunicação com o servidor.');
+   } finally {
+              setIsLoadingBusca(false);
    }
  };
 
@@ -193,6 +199,8 @@ const [colaborador, setColaborador] = useState('');
       return;
     }
 
+    setIsLoadingBusca(true);
+    
     try {
       const response = await fetch(`https://chamados-softline-k3bsb.ondigitalocean.app/chamados/user/softline/buscarChamados?ticket=${ticket}`);
 
@@ -209,7 +217,9 @@ const [colaborador, setColaborador] = useState('');
       }
     } catch (error) {
       setMensagemErro('Erro na comunicação com o servidor.');
-    }
+    } finally {
+               setIsLoadingBusca(false);
+     }
   };
 
 
@@ -235,9 +245,20 @@ const [colaborador, setColaborador] = useState('');
                         value={ticket}
                         onChange={(e) => setTicket(e.target.value)}
                       />
-                      <button className="btn btn-success rounded-pill" onClick={buscarPorTicket}>
-                        Buscar
-                      </button>
+               <button
+                   className="btn btn-success rounded-pill"
+                   onClick={buscarPorColaborador}
+                   disabled={isLoadingBusca}
+                 >
+                   {isLoadingBusca ? (
+                     <>
+                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                       <span className="ms-2">Buscando...</span>
+                     </>
+                   ) : (
+                     'Buscar'
+                   )}
+               </button>
                     </div>
 
                     {/* Div de busca por colaborador */}
@@ -250,9 +271,23 @@ const [colaborador, setColaborador] = useState('');
                         value={colaborador}
                         onChange={(e) => setColaborador(e.target.value)}
                       />
-                      <button className="btn btn-success rounded-pill" onClick={buscarPorColaborador}>
-                        Buscar
-                      </button>
+
+               <button
+                   className="btn btn-success rounded-pill"
+                   onClick={buscarPorColaborador}
+                   disabled={isLoadingBusca}
+                 >
+                   {isLoadingBusca ? (
+                     <>
+                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                       <span className="ms-2">Buscando...</span>
+                     </>
+                   ) : (
+                     'Buscar'
+                   )}
+               </button>>
+
+                      
                     </div>
                   </div>
                 </div>
