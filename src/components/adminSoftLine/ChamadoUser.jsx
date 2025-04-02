@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom"; // Importe o useNavigate
 export default function ChamadoUser() {
 
     const navigate = useNavigate(); // Hook para redirecionamento
-
+    const [isLoading, setIsLoading] = useState(false);
+    
     const [formData, setFormData] = useState({
     nome: "",
     email: "",
@@ -46,6 +47,7 @@ export default function ChamadoUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+       setIsLoading(true);
     setMessage("");
 
     try {
@@ -71,7 +73,10 @@ export default function ChamadoUser() {
         setMessage("Erro: Não foi possível cadastrar o usuário.");
         setAlertType("danger");
       }
-    }
+    } finally {
+                setIsLoading(false); // Desativa o estado de loading independente do resultado
+
+     }
   };
 
   return (
@@ -197,9 +202,20 @@ export default function ChamadoUser() {
 
         <div className="row mt-4">
            <div className="col text-center">
-           <button type="submit" className="btn btn-primary rounded-pill">
-              Registrar
-            </button>
+             <button
+                          type="submit"
+                          className="btn btn-primary rounded-pill"
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              <span className="ms-2">Enviando...</span>
+                            </>
+                          ) : (
+                            "Registrar"
+                          )}
+             </button>
            </div>
          </div>
       </form>
