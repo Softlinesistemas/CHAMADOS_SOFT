@@ -7,7 +7,11 @@ export default function ListarUsuarios() {
 
   // Adicione este estado no início do componente
 const [isLoadingBusca, setIsLoadingBusca] = useState(false);
+// Adicione junto com os outros estados
+const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+const [isLoadingUpdatePapeis, setIsLoadingUpdatePapeis] = useState(false);
 
+  
   const [usuarios, setUsuarios] = useState([]);
   const [cnpj, setCnpj] = useState('');
   const [resultados, setResultados] = useState([]);
@@ -146,6 +150,8 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
   const handleUpdate = async () => {
     if (!usuarioEditando) return;
 
+     setIsLoadingUpdate(true); // Ativa o estado de loading
+
     try {
       const response = await axios.put(
         `https://chamados-softline-k3bsb.ondigitalocean.app/usuario/atualizar/${usuarioEditando.id}`,
@@ -163,7 +169,9 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
       fecharModal();
     } catch (err) {
       alert("Erro ao atualizar usuário. Tente novamente.");
-    }
+    } finally {
+          setIsLoadingUpdate(false); // Desativa o estado de loading
+        }
   };
 
 
@@ -182,7 +190,8 @@ const handlePapelChange = (papelId) => {
  const handleUpdatePapeis = async () => {
 
    if (!usuarioEditando) return;
-
+   setIsLoadingUpdatePapeis(true); // Ativa o estado de loading
+   
    try {
      const params = new URLSearchParams();
      papeisSelecionados.forEach((id) => params.append("pps", id));
@@ -200,7 +209,9 @@ console.log("URL:", `https://chamados-softline-k3bsb.ondigitalocean.app/usuario/
      fecharModalPapeis();
    } catch (err) {
      alert("Erro ao atualizar papéis. Tente novamente.");
-   }
+   }  finally {
+         setIsLoadingUpdatePapeis(false); // Desativa o estado de loading
+       }
  };
 
 
@@ -437,9 +448,21 @@ const buscarPorCnpj = async () => {
                         <button type="button" className="btn btn-secondary rounded-pill" onClick={fecharModal}>
                           Cancelar
                         </button>
-                        <button type="button" className="btn btn-primary rounded-pill" onClick={handleUpdate}>
-                          Salvar
-                        </button>
+                    <button
+                          type="button"
+                          className="btn btn-primary rounded-pill"
+                          onClick={handleUpdate}
+                          disabled={isLoadingUpdate}
+                        >
+                          {isLoadingUpdate ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              <span className="ms-2">Salvando...</span>
+                            </>
+                          ) : (
+                            'Salvar'
+                          )}
+                 </button>
                       </div>
                     </div>
                   </div>
@@ -481,13 +504,21 @@ const buscarPorCnpj = async () => {
                 >
                   Cancelar
                 </button>
-                <button
-                  type="button"
-                  className="btn btn-primary rounded-pill"
-                  onClick={handleUpdatePapeis}
-                >
-                  Salvar
-                </button>
+              <button
+                type="button"
+                className="btn btn-primary rounded-pill"
+                onClick={handleUpdatePapeis}
+                disabled={isLoadingUpdatePapeis}
+              >
+                {isLoadingUpdatePapeis ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span className="ms-2">Salvando...</span>
+                  </>
+                ) : (
+                  'Salvar'
+                )}
+              </button>
               </div>
             </div>
           </div>
