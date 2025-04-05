@@ -2,7 +2,7 @@
 import React, { useState, useEffect  } from 'react';
 import '../css/AdminSoftLineListagem.css';
 
-import AdminHeaders from '../headers/AdminHeaders'; // Certifique-se de que o caminho está correto
+import AdminHeaders from '../headers/AdminHeaders';
 
 
 export default function AdminSoftLineListagem({ vetor = [] }) {
