@@ -19,7 +19,7 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
     const [modalAberto, setModalAberto] = useState(false);
     const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
 
-
+    const [totalItens, setTotalItens] = useState(0);
 
  // Função para verificar se o usuário está autorizado
   const verificarAutorizacao = () => {
@@ -111,6 +111,8 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
             if (response.ok) {
                 const data = await response.json();
                 setResultados(data);
+               setTotalItens(prev => data.length === itensPorPagina ? (paginaAtual + 1) * itensPorPagina + 1 : paginaAtual * itensPorPagina + data.length);
+
             } else {
                 alert("Erro ao buscar os chamados.");
             }
@@ -366,7 +368,7 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
                     ))}
                 </tbody>
             </table>
-
+{/*
             <div className="d-flex justify-content-center my-3">
                 <button
                     className="btn btn-primary rounded-pill mx-2"
@@ -384,7 +386,27 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
                     Próximo
                 </button>
             </div>
+*/}
 
+ <div className="d-flex justify-content-center my-2">
+           <span className="me-2">Itens por página:</span>
+           <select
+             className="form-select"
+             style={{ width: '80px' }}
+             value={itensPorPagina}
+             onChange={(e) => {
+               setItensPorPagina(Number(e.target.value));
+               setPaginaAtual(0); // Resetar para a primeira página ao mudar o tamanho
+             }}
+           >
+             <option value="5">5</option>
+             <option value="10">10</option>
+             <option value="20">20</option>
+             <option value="50">50</option>
+           </select>
+</div>
+
+            
             {modalAberto && (
                 <div className="modal" style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
                     <div className="modal-dialog modal-lg">
