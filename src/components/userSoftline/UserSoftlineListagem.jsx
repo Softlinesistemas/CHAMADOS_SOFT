@@ -28,7 +28,7 @@ const [colaborador, setColaborador] = useState('');
 
   // Adicione este estado no início do componente
 const [isLoadingBusca, setIsLoadingBusca] = useState(false);
-
+const [totalItens, setTotalItens] = useState(0);
  // Função para verificar se o usuário está autorizado
   const verificarAutorizacao = () => {
     // Exemplo de verificação: verifica se há um token no localStorage
@@ -179,6 +179,8 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
       if (response.ok) {
         const data = await response.json();
         setResultados(data);
+       setTotalItens(prev => data.length === itensPorPagina ? (paginaAtual + 1) * itensPorPagina + 1 : paginaAtual * itensPorPagina + data.length);
+
       } else {
         alert('Erro ao buscar os chamados.');
       }
@@ -411,7 +413,7 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
       </table>
 
 
-
+{/*
 <div className="d-flex justify-content-center my-3">
   <button
     className="btn btn-primary rounded-pill mx-2"
@@ -428,6 +430,25 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
   >
     Próximo
   </button>
+</div>  */}
+
+
+ <div className="d-flex justify-content-center my-2">
+           <span className="me-2">Itens por página:</span>
+           <select
+             className="form-select"
+             style={{ width: '80px' }}
+             value={itensPorPagina}
+             onChange={(e) => {
+               setItensPorPagina(Number(e.target.value));
+               setPaginaAtual(0); // Resetar para a primeira página ao mudar o tamanho
+             }}
+           >
+             <option value="5">5</option>
+             <option value="10">10</option>
+             <option value="20">20</option>
+             <option value="50">50</option>
+           </select>
 </div>
 
 
