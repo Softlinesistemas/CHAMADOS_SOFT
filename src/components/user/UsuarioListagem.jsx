@@ -20,7 +20,9 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
     const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
 
     const [totalItens, setTotalItens] = useState(0);
+const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
 
+    
  // Função para verificar se o usuário está autorizado
   const verificarAutorizacao = () => {
     // Exemplo de verificação: verifica se há um token no localStorage
@@ -190,7 +192,9 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
                 alert("Erro: Nenhum chamado selecionado.");
                 return;
                 }
-
+        
+               setIsLoadingUpdate(true); // Ativa o estado de loading
+        
         try {
             const token = localStorage.getItem("token");
 
@@ -218,7 +222,9 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
             }
         } catch (error) {
             alert("Erro na comunicação com o servidor.");
-        }
+        }  finally {
+              setIsLoadingUpdate(false); // Desativa o estado de loading
+            }
     };
 
     const excluirChamado = async (id) => {
@@ -446,9 +452,30 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
                                 <button type="button" className="btn btn-secondary rounded-pill" onClick={fecharModal}>
                                     Cancelar
                                 </button>
-                                <button type="button" className="btn btn-primary rounded-pill" onClick={atualizarChamado}>
+
+                                
+                                {/*   <button type="button" className="btn btn-primary rounded-pill" onClick={atualizarChamado}>
                                     Salvar
-                                </button>
+                                </button>  */}
+
+
+                             <button
+                                  type="button"
+                                  className="btn btn-primary rounded-pill"
+                                  onClick={atualizarChamado}
+                                  disabled={isLoadingUpdate}
+                                >
+                                  {isLoadingUpdate ? (
+                                    <>
+                                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                      <span className="ms-2">Salvando...</span>
+                                    </>
+                                  ) : (
+                                    'Salvar'
+                                  )}
+                            </button>
+
+                                
                             </div>
                         </div>
                     </div>
