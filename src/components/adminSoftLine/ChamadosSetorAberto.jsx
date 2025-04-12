@@ -66,63 +66,57 @@ const ChamadosSetorAberto = () => {
     }
   }, [navigate]);
 
-const options = {
-  chart: {
-    type: "pie",
-  },
-  title: {
-    text: "Relatório dos Status de todos os Chamados",
-  },
-  tooltip: {
-    pointFormat: '{series.name}: <b>{point.y}</b>'
-  },
-  plotOptions: {
-    pie: {
-      allowPointSelect: true,
-      cursor: "pointer",
-      dataLabels: {
-        enabled: true,
-        format: "<b>{point.name}</b>: {point.y}",
-        style: {
-          fontSize: "1.2em",
-          textOutline: "none",
-        },
-      },
-      showInLegend: true,
-
-legend: {
-  labelFormatter: function () {
-    return this.name;
-  }
-}
-
-
-      
+  const options = {
+    chart: {
+      type: "pie",
     },
-  },
-  series: [{
-    name: "Quantidade",
-    colorByPoint: true,
-    data: [
-      { name: "Suporte", y: chartData.suporte },
-      { name: "Cobrança", y: chartData.cobranca },
-      { name: "Comercial", y: chartData.comercial },
-      { name: "Implantação", y: chartData.implantacao },
-      { name: "Fiscal", y: chartData.fiscal },
-      { name: "Customização", y: chartData.customizacao },
-      { name: "Elogio", y: chartData.elogio },
-      { name: "Outros", y: chartData.outros },
-      { name: "Reclamação", y: chartData.reclamacao },
-      { name: "Urgente", y: chartData.urgente },
-      { name: "Visita Técnica", y: chartData.visitaTecnica },
-      { name: "Treinamento", y: chartData.treinamento },
-      { name: "Sugestão", y: chartData.sugestao },
-      { name: "Cobrança Homologação", y: chartData.cobrancaHomologacao },
-      { name: "Resolução de Erro", y: chartData.resolucaoDeErro }
-    ]
-  }]
-};
-
+    title: {
+      text: "Relatório dos Status de todos os Chamados",
+    },
+    tooltip: {
+      formatter: function() {
+        return `<b>${this.point.name}</b>`; // Mostra apenas o nome no tooltip
+      }
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: "pointer",
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b>', // Mostra apenas o nome
+          style: {
+            fontSize: "12px",
+            textOutline: "none",
+            fontWeight: "bold"
+          },
+          distance: -30, // Ajusta a posição dos labels
+        },
+        showInLegend: false // Oculta a legenda
+      },
+    },
+    series: [{
+      name: "Chamados",
+      colorByPoint: true,
+      data: [
+        { name: "Suporte", y: chartData.suporte },
+        { name: "Cobrança", y: chartData.cobranca },
+        { name: "Comercial", y: chartData.comercial },
+        { name: "Implantação", y: chartData.implantacao },
+        { name: "Fiscal", y: chartData.fiscal },
+        { name: "Customização", y: chartData.customizacao },
+        { name: "Elogio", y: chartData.elogio },
+        { name: "Outros", y: chartData.outros },
+        { name: "Reclamação", y: chartData.reclamacao },
+        { name: "Urgente", y: chartData.urgente },
+        { name: "Visita Técnica", y: chartData.visitaTecnica },
+        { name: "Treinamento", y: chartData.treinamento },
+        { name: "Sugestão", y: chartData.sugestao },
+        { name: "Cobrança Homologação", y: chartData.cobrancaHomologacao },
+        { name: "Resolução de Erro", y: chartData.resolucaoDeErro }
+      ]
+    }]
+  };
 
   return (
     <div>
@@ -131,7 +125,7 @@ legend: {
         Relatório de todos os chamados dos setores em aberto
       </h2>
 
-      <div style={{ height: "400px" }}>
+      <div style={{ height: "500px", padding: "20px" }}>
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     </div>
