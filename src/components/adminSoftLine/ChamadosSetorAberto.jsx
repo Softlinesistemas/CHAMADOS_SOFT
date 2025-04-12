@@ -17,7 +17,18 @@ const navigate = useNavigate(); // Hook para redirecionamento
     comercial: 0,
     implantacao: 0,
     fiscal: 0,
-    customizacao: 0
+    customizacao: 0,
+    elogio: 0,
+    outros: 0,
+    reclamacao: 0,
+    urgente: 0,
+    visitaTecnica: 0,
+    treinamento: 0,
+    sugestao: 0,
+    cobrancaHomologacao: 0,
+    resolucaoDeErro: 0
+
+   
   });
 
 {/*}
@@ -33,6 +44,15 @@ React.useEffect(() => {
         implantacao: data.implantacao || 0,
         fiscal: data.fiscal || 0,
         customizacao: data.customizacao || 0,
+        elogio: data.elogio || 0,
+        outros: data.outros || 0,
+        reclamacao: data.reclamacao || 0,
+        urgente: data.urgente || 0,
+        visitaTecnica: data.visitaTecnica || 0,
+        treinamento: data.treinamento || 0,
+        sugestao: data.sugestao || 0,
+        cobrancaHomologacao: data.cobrancaHomologacao || 0,
+        resolucaoDeErro: data.resolucaoDeErro || 0,
 
       });
     })
@@ -144,6 +164,52 @@ React.useEffect(() => {
                   name: "Chamados de customizacao",
                   y: chartData.customizacao,
      },
+
+     {
+                   name: "Elogios",
+                   y: chartData.elogio,
+      },
+
+        {
+                     name: "Outros",
+                     y: chartData.outros,
+        },
+
+        {
+                         name: "Reclamações",
+                         y: chartData.reclamacao,
+        },
+
+        {
+                         name: "Urgente",
+                         y: chartData.urgente,
+        },
+
+        {
+                             name: "Visita Técnica",
+                             y: chartData.visitaTecnica,
+        },
+       {
+                                 name: "Treinamentos",
+                                 y: chartData.treinamento,
+       },
+
+      {
+                                name: "Sugestões",
+                                y: chartData.sugestao,
+      },
+
+     {
+                               name: "Cobrança Homologação",
+                               y: chartData.cobrancaHomologacao,
+     },
+
+     {
+                                name: "Resolução de Erro",
+                                y: chartData.resolucaoDeErro,
+      },
+
+         
 
         ],
       },
