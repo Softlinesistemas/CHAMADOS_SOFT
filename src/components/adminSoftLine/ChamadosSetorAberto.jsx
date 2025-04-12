@@ -88,7 +88,16 @@ const options = {
           textOutline: "none",
         },
       },
-      showInLegend: true
+      showInLegend: true,
+
+legend: {
+  labelFormatter: function () {
+    return this.name;
+  }
+}
+
+
+      
     },
   },
   series: [{
