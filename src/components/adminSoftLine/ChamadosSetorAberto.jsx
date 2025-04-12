@@ -33,7 +33,7 @@ const ChamadosSetorAberto = () => {
       axios
         .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/relatorio/statusAssuntosChamados", {
           headers: {
-            Authorization: Bearer ${token},
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
@@ -74,7 +74,7 @@ const ChamadosSetorAberto = () => {
       text: "Relatório dos Status de todos os Chamados",
     },
     tooltip: {
-      pointFormat: '<b>{point.name}</b>'
+      pointFormat: '{series.name}: <b>{point.y}</b>'
     },
     plotOptions: {
       pie: {
