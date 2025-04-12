@@ -74,7 +74,7 @@ const ChamadosSetorAberto = () => {
       text: "Relatório dos Status de todos os Chamados",
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.y} ({point.percentage:.1f}%)</b>'
+      pointFormat: '{series.name}: <b>{point.y}</b>'
     },
     plotOptions: {
       pie: {
