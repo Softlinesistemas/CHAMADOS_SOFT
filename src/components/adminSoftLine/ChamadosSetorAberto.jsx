@@ -74,7 +74,7 @@ const ChamadosSetorAberto = () => {
       text: "Relatório dos Status de todos os Chamados",
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.y}</b>'
+      pointFormat: '<b>{point.name}</b>'
     },
     plotOptions: {
       pie: {
@@ -82,17 +82,18 @@ const ChamadosSetorAberto = () => {
         cursor: "pointer",
         dataLabels: {
           enabled: true,
-          format: "<b>{point.name}</b>: {point.y}",
+          format: '<b>{point.name}</b>', // Mostra apenas o nome
           style: {
-            fontSize: "1.2em",
+            fontSize: "12px",
             textOutline: "none",
           },
+          distance: -30, // Ajusta a posição dos labels
         },
-        showInLegend: true
+        showInLegend: false // Oculta a legenda se quiser
       },
     },
     series: [{
-      name: "Quantidade",
+      name: "Chamados",
       colorByPoint: true,
       data: [
         { name: "Suporte", y: chartData.suporte },
@@ -121,7 +122,7 @@ const ChamadosSetorAberto = () => {
         Relatório de todos os chamados dos setores em aberto
       </h2>
 
-      <div style={{ height: "400px" }}>
+      <div style={{ height: "500px", padding: "20px" }}>
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     </div>
