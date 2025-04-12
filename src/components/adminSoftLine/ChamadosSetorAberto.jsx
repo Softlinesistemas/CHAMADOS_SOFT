@@ -33,7 +33,7 @@ const ChamadosSetorAberto = () => {
       axios
         .get("https://chamados-softline-k3bsb.ondigitalocean.app/chamados/relatorio/statusAssuntosChamados", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: Bearer ${token},
           },
         })
         .then((response) => {
@@ -82,18 +82,17 @@ const ChamadosSetorAberto = () => {
         cursor: "pointer",
         dataLabels: {
           enabled: true,
-          format: '<b>{point.name}</b>', // Mostra apenas o nome
+          format: "<b>{point.name}</b>: {point.y}",
           style: {
-            fontSize: "12px",
+            fontSize: "1.2em",
             textOutline: "none",
           },
-          distance: -30, // Ajusta a posição dos labels
         },
-        showInLegend: false // Oculta a legenda se quiser
+        showInLegend: true
       },
     },
     series: [{
-      name: "Chamados",
+      name: "Quantidade",
       colorByPoint: true,
       data: [
         { name: "Suporte", y: chartData.suporte },
@@ -122,7 +121,7 @@ const ChamadosSetorAberto = () => {
         Relatório de todos os chamados dos setores em aberto
       </h2>
 
-      <div style={{ height: "500px", padding: "20px" }}>
+      <div style={{ height: "400px" }}>
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     </div>
