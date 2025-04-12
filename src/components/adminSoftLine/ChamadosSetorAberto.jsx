@@ -84,6 +84,17 @@ React.useEffect(() => {
                         implantacao: data.implantacao || 0,
                         fiscal: data.fiscal || 0,
                         customizacao: data.customizacao || 0,
+                        elogio: data.elogio || 0,
+                        outros: data.outros || 0,
+                        reclamacao: data.reclamacao || 0,
+                        urgente: data.urgente || 0,
+                        visitaTecnica: data.visitaTecnica || 0,
+                        treinamento: data.treinamento || 0,
+                        sugestao: data.sugestao || 0,
+                        cobrancaHomologacao: data.cobrancaHomologacao || 0,
+                        resolucaoDeErro: data.resolucaoDeErro || 0,
+
+                     
                     });
                 })
                 .catch((error) => {
