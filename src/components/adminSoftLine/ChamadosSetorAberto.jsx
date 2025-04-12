@@ -66,53 +66,54 @@ const ChamadosSetorAberto = () => {
     }
   }, [navigate]);
 
-  const options = {
-    chart: {
-      type: "pie",
-    },
-    title: {
-      text: "Relatório dos Status de todos os Chamados",
-    },
-    tooltip: {
-      pointFormat: '{series.name}: <b>{point.y}</b>'
-    },
-    plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: "pointer",
-        dataLabels: {
-          enabled: true,
-          format: "<b>{point.name}</b>: {point.y}",
-          style: {
-            fontSize: "1.2em",
-            textOutline: "none",
-          },
+const options = {
+  chart: {
+    type: "pie",
+  },
+  title: {
+    text: "Relatório dos Status de todos os Chamados",
+  },
+  tooltip: {
+    pointFormat: '{series.name}: <b>{point.y}</b>'
+  },
+  plotOptions: {
+    pie: {
+      allowPointSelect: true,
+      cursor: "pointer",
+      dataLabels: {
+        enabled: true,
+        format: "<b>{point.name}</b>: {point.y}",
+        style: {
+          fontSize: "1.2em",
+          textOutline: "none",
         },
-        showInLegend: true
       },
+      showInLegend: true
     },
-    series: [{
-      name: "Quantidade",
-      colorByPoint: true,
-      data: [
-        { name: "Suporte", y: chartData.suporte },
-        { name: "Cobrança", y: chartData.cobranca },
-        { name: "Comercial", y: chartData.comercial },
-        { name: "Implantação", y: chartData.implantacao },
-        { name: "Fiscal", y: chartData.fiscal },
-        { name: "Customização", y: chartData.customizacao },
-        { name: "Elogio", y: chartData.elogio },
-        { name: "Outros", y: chartData.outros },
-        { name: "Reclamação", y: chartData.reclamacao },
-        { name: "Urgente", y: chartData.urgente },
-        { name: "Visita Técnica", y: chartData.visitaTecnica },
-        { name: "Treinamento", y: chartData.treinamento },
-        { name: "Sugestão", y: chartData.sugestao },
-        { name: "Cobrança Homologação", y: chartData.cobrancaHomologacao },
-        { name: "Resolução de Erro", y: chartData.resolucaoDeErro }
-      ]
-    }]
-  };
+  },
+  series: [{
+    name: "Quantidade",
+    colorByPoint: true,
+    data: [
+      { name: "Suporte", y: chartData.suporte },
+      { name: "Cobrança", y: chartData.cobranca },
+      { name: "Comercial", y: chartData.comercial },
+      { name: "Implantação", y: chartData.implantacao },
+      { name: "Fiscal", y: chartData.fiscal },
+      { name: "Customização", y: chartData.customizacao },
+      { name: "Elogio", y: chartData.elogio },
+      { name: "Outros", y: chartData.outros },
+      { name: "Reclamação", y: chartData.reclamacao },
+      { name: "Urgente", y: chartData.urgente },
+      { name: "Visita Técnica", y: chartData.visitaTecnica },
+      { name: "Treinamento", y: chartData.treinamento },
+      { name: "Sugestão", y: chartData.sugestao },
+      { name: "Cobrança Homologação", y: chartData.cobrancaHomologacao },
+      { name: "Resolução de Erro", y: chartData.resolucaoDeErro }
+    ]
+  }]
+};
+
 
   return (
     <div>
