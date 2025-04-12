@@ -530,6 +530,11 @@ useEffect(() => {
     <option value="10">10</option>
     <option value="20">20</option>
     <option value="50">50</option>
+    <option value="60">60</option>
+    <option value="70">70</option>
+    <option value="80">80</option>
+    <option value="100">100</option>
+    <option value="350">350</option>
   </select>
 </div>
 
