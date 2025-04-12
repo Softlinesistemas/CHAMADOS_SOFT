@@ -11,7 +11,10 @@ const RelatorioStatusChamados = () => {
         emAndamento: 0,
         emFaseDeTeste: 0,
         resolvido: 0,
-        analise: 0
+        analise: 0,
+        aberto: 0,
+        pendente: 0,
+        atualizar: 0
     });
 
     useEffect(() => {
@@ -31,6 +34,9 @@ const RelatorioStatusChamados = () => {
                     emFaseDeTeste: data.EmFaseDeTeste || 0,
                     resolvido: data.Resolvido || 0,
                     analise: data.EmAnalise || 0, // Corrigido para manter consistência
+                    aberto: data.aberto || 0,
+                    pendente: data.pendente || 0,
+                    atualizar: data.atualizar || 0,
                 });
             })
             .catch((error) => {
@@ -75,7 +81,10 @@ const RelatorioStatusChamados = () => {
                 { name: "Chamados em Andamento", y: chartData.emAndamento },
                 { name: "Chamados em Fase de Teste", y: chartData.emFaseDeTeste },
                 { name: "Chamados Resolvidos", y: chartData.resolvido },
-                { name: "Chamados em Análise", y: chartData.analise }
+                { name: "Chamados em Análise", y: chartData.analise },
+                { name: "Chamados em Aberto", y: chartData.aberto },
+                { name: "Chamados Pendentes", y: chartData.pendente },
+                { name: "Chamados para atualizar", y: chartData.atualizar }
             ]
         }]
     };
