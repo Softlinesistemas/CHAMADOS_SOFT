@@ -26,17 +26,12 @@ export default function ImplantacaoHeaders(){
 
 
 {/* Botão de logout */}
-     <button
-           onClick={handleLogout}
-           className="btn btn-danger"
-           style={{
-             marginLeft: '20px',
-             padding: '10px 20px',
-             borderRadius: '5px',
-           }}
-         >
-           Sair
-    </button>
+<div className="d-flex align-items-center">
+  <button onClick={handleLogout} className="btn-sair">
+    Sair
+  </button>
+</div>
+
 
             </header>
 
