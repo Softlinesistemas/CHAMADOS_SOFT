@@ -58,13 +58,14 @@
     animation: piscar 1s infinite;
 }
 
-
+/*
 tr.bg-vermelho-intenso {
-  background-color: #CC0808 !important; /* Vermelho puro */
-  color: white !important; /* Texto branco para contraste */
+  background-color: #CC0808 !important; 
+  color: white !important; 
 }
 
 tr.bg-vermelho-intenso td {
   background-color: inherit !important;
   color: inherit !important;
 }
+*/
