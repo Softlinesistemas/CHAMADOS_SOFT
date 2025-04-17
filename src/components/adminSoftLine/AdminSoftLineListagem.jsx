@@ -430,9 +430,8 @@ useEffect(() => {
             <tr
              key={objeto.ticket}
                  className={
-                    objeto.assuntos?.descricao === 'Urgente'
-                    ? 'bg-vermelho-intenso' // Vermelho personalizado
-                    : objeto.assuntos?.descricao === 'Customização' && objeto.dias > 5
+                    
+                    objeto.assuntos?.descricao === 'Customização' && objeto.dias > 5
                     ? 'table-danger' // Adiciona a classe de realce condicional
                     : objeto.assuntos?.descricao === 'Implantação' && objeto.dias > 4
                     ? 'table-warning' // Realça com amarelo
