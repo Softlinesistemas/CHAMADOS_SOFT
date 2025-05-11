@@ -27,7 +27,11 @@ const [isLoadingBusca, setIsLoadingBusca] = useState(false);
  const [cnpj, setCnpj] = useState('');  // Estado para armazenar o CNPJ
 const [totalItens, setTotalItens] = useState(0);
 
+// ================================== HOJE =======================
+const [assuntoSelecionado, setAssuntoSelecionado] = useState('');
 
+
+  
  const buscarPorColaborador = async () => {
 
  if (!colaborador.trim()) {
@@ -294,6 +298,43 @@ useEffect(() => {
 
 
 
+
+// ====================== HOJE =====================================
+const buscarPorAssunto = async () => {
+  if (!assuntoSelecionado) {
+    setMensagemErro('Por favor, selecione um assunto.');
+    return;
+  }
+
+  setIsLoadingBusca(true);
+
+  try {
+    const response = await fetch(
+      `https://chamados-softline-k3bsb.ondigitalocean.app/chamados/listar_Por_assunto?descricao=${encodeURIComponent(assuntoSelecionado)}`
+    );
+
+    if (response.status === 204) {
+      setResultados([]);
+      setMensagemErro('Nenhum chamado encontrado para este assunto.');
+    } else if (response.ok) {
+      const data = await response.json();
+      setResultados(data);
+      setMensagemErro('');
+    } else {
+      const errorText = await response.text();
+      setMensagemErro(`Erro ao buscar os dados: ${errorText}`);
+    }
+  } catch (error) {
+    setMensagemErro('Erro na comunicação com o servidor.');
+  } finally {
+    setIsLoadingBusca(false);
+  }
+};
+  
+
+
+  
+
   return (
     <div className="titulo">
         <AdminHeaders />
@@ -372,7 +413,48 @@ useEffect(() => {
      ) : (
        'Buscar'
      )}
-</button>
+</button> &nbsp;
+
+
+
+{/* ====================================== HOJE ============================== */}
+
+<div className="d-flex align-items-center me-3">
+  <select
+    className="form-select rounded-pill border border-success me-2"
+    style={{ width: "300px" }}
+    value={assuntoSelecionado}
+    onChange={(e) => setAssuntoSelecionado(e.target.value)}
+  >
+    <option value="">Selecione um assunto</option>
+    {assuntos.map((assunto) => (
+      <option key={assunto.id} value={assunto.descricao}>
+        {assunto.descricao}
+      </option>
+    ))}
+  </select>
+  <button
+    className="btn btn-success rounded-pill"
+    onClick={buscarPorAssunto}
+    disabled={isLoadingBusca}
+  >
+    {isLoadingBusca ? (
+      <>
+        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span className="ms-2">Buscando...</span>
+      </>
+    ) : (
+      'Buscar'
+    )}
+  </button>
+</div>
+
+
+{/* ====================================== HOJE ============================== */}
+
+
+
+                
                 
               </div>
             </div>
