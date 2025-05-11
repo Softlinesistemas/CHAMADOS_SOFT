@@ -251,13 +251,13 @@ const fetchOptions = async () => {
                       <th>Data</th>
                       <th>Ticket</th>
                       <th>Solicitação</th>
+                      <th>Reclamação</th>
                       <th>Horário</th>
                       <th>Dias</th>
                       <th>Arquivo</th>
                       <th>Assunto</th>
                       <th>Status</th>
-                      <th>Colaborador</th>
-                       {/* <th>Reclamação</th> */}
+                      <th>Colaborador</th> 
                       <th>Ações</th>
                     </tr>
                   </thead>
@@ -286,7 +286,16 @@ const fetchOptions = async () => {
                         <td>{objeto.nome}</td>
                         <td>{objeto.data}</td>
                         <td>{objeto.ticket}</td>
-                        <td>{objeto.justificativa}</td>
+                        {/* <td>{objeto.justificativa}</td> */}
+                        <td title={objeto.justificativa}>
+                            {objeto.justificativa && objeto.justificativa.substring(0, 5)}
+                            {objeto.justificativa && objeto.justificativa.length > 30 && '...'}
+                        </td>
+                          {/* <td>{objeto.reclamacao}</td> */}
+                         <td title={objeto.reclamacao}>
+                          {objeto.reclamacao && objeto.reclamacao.substring(0, 5)}
+                          {objeto.reclamacao && objeto.reclamacao.length > 30 && '...'}
+                         </td>
                         <td>{objeto.horario}</td>
                         <td>{objeto.dias}</td>
                         <td>
