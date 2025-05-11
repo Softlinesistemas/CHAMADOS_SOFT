@@ -321,7 +321,7 @@ const [totalItens, setTotalItens] = useState(0);
             <th>Empresa</th>
             <th>Nome</th>
              <th>Solicitação</th>
-            {/*  <th>Reclamação</th> */}
+            <th>Reclamação</th>
             <th>CNPJ</th>
             <th>Data</th>
             <th>Dias</th>
@@ -366,13 +366,18 @@ const [totalItens, setTotalItens] = useState(0);
               <td>{objeto.empresa}</td>
               <td>{objeto.nome}</td>
 
-               <td>{objeto.justificativa}</td>
+             {/* <td>{objeto.justificativa}</td> */}
 
+            <td title={objeto.justificativa}>
+                {objeto.justificativa && objeto.justificativa.substring(0, 5)}
+                {objeto.justificativa && objeto.justificativa.length > 30 && '...'}
+            </td>
 
-
-
-
-              {/*  <td>{objeto.reclamacao}</td> */}
+             {/* <td>{objeto.reclamacao}</td> */}
+                <td title={objeto.reclamacao}>
+                 {objeto.reclamacao && objeto.reclamacao.substring(0, 5)}
+                 {objeto.reclamacao && objeto.reclamacao.length > 30 && '...'}
+              </td> 
 
               <td>{objeto.cnpj}</td>
               <td>{objeto.data}</td>
