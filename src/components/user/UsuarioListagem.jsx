@@ -345,7 +345,13 @@ const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
                             <td>{objeto.horario}</td>
                             <td>{objeto.empresa}</td>
                             <td>{objeto.nome}</td>
-                            <td>{objeto.justificativa}</td>
+                            
+                           {/* <td>{objeto.justificativa}</td> */}
+                            <td title={objeto.justificativa}>
+                                {objeto.justificativa && objeto.justificativa.substring(0, 5)}
+                                {objeto.justificativa && objeto.justificativa.length > 30 && '...'}
+                            </td>
+                            
                             <td>{objeto.cnpj}</td>
                             <td>{objeto.data}</td>
                             <td>{objeto.dias}</td>
